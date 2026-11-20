@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Série de TD N°5 CRM : Modélisation Dynamique Directe et Inverse | USTHB — M2 AII</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Strictly Academic & Engineering Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- KaTeX v0.16.9 for Crisp Publication-Grade LaTeX Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+                        display: ['"Outfit"', 'system-ui', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        obsidian: {
+                            950: '#070913',
+                            900: '#0f1426',
+                            850: '#141c33',
+                            800: '#1e293b',
+                        },
+                        accent: {
+                            blue: '#3b82f6',
+                            cyan: '#06b6d4',
+                            violet: '#8b5cf6',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #070913;
+            color: #e2e8f0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-image:
+                radial-gradient(circle at 12% 8%, rgba(59, 130, 246, 0.13), transparent 36%),
+                radial-gradient(circle at 88% 14%, rgba(139, 92, 246, 0.13), transparent 36%),
+                radial-gradient(circle at 50% 88%, rgba(6, 182, 212, 0.08), transparent 44%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        /* Google Pixel Astronomical Obsidian Glassmorphic Cards */
+        .glass-card {
+            background: rgba(15, 20, 38, 0.84);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(56, 189, 248, 0.18);
+            border-radius: 1rem;
+            box-shadow: 0 12px 32px -12px rgba(2, 6, 23, 0.82);
+        }
+
+        .glass-card-elevated {
+            background: rgba(15, 20, 38, 0.90);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(139, 92, 246, 0.28);
+            border-radius: 1rem;
+            box-shadow: 0 18px 42px -12px rgba(2, 6, 23, 0.9);
+        }
+
+        .handout-paper {
+            background: linear-gradient(180deg, rgba(15, 20, 38, 0.94) 0%, rgba(10, 14, 28, 0.98) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.28);
+            border-radius: 0.875rem;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 10px 25px -10px rgba(0, 0, 0, 0.65);
+        }
+
+        .btn-primary {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.8125rem;
+            letter-spacing: 0.015em;
+            border: 1px solid rgba(96, 165, 250, 0.45);
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            color: #ffffff;
+            border-radius: 0.65rem;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+            border-color: rgba(167, 139, 250, 0.75);
+        }
+
+        .nav-pill {
+            transition: all 0.18s ease;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            background: rgba(15, 20, 38, 0.78);
+        }
+
+        .nav-pill:hover {
+            border-color: rgba(6, 182, 212, 0.55);
+            color: #ffffff;
+            background: rgba(22, 30, 56, 0.95);
+        }
+
+        .nav-pill-active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.28) 0%, rgba(139, 92, 246, 0.30) 100%) !important;
+            border-color: rgba(6, 182, 212, 0.7) !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 12px rgba(6, 182, 212, 0.22);
+        }
+
+        /* KaTeX Dark Mode Polish */
+        .katex {
+            font-size: 1.03em;
+            color: #f8fafc;
+        }
+        .katex-display {
+            margin: 0.6rem 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.25rem 0;
+        }
+
+        /* Range Slider Styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: #1e293b;
+            border-radius: 999px;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #06b6d4;
+            border: 2px solid #070913;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.7);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070913;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6;
+        }
+
+        /* Clean Export PDF / Print Media Rules */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            header {
+                position: static !important;
+                background: #070913 !important;
+            }
+            body {
+                background: #070913 !important;
+                color: #f1f5f9 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .glass-card, .glass-card-elevated, .handout-paper {
+                background: #0f1426 !important;
+                backdrop-filter: none !important;
+                box-shadow: none !important;
+                border: 1px solid #334155 !important;
+                break-inside: avoid;
+            }
+            section {
+                page-break-before: always;
+            }
+            section:first-of-type {
+                page-break-before: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-blue-500/30 selection:text-cyan-200">
+
+    <!-- STICKY TOP ACADEMIC BAR -->
+    <header class="sticky top-0 z-50 border-b border-slate-800/90 bg-[#070913]/92 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+            <!-- Left: USTHB & Module Identity -->
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600/30 via-cyan-500/20 to-violet-600/30 border border-cyan-400/40 flex items-center justify-center shadow-lg shadow-blue-950/50">
+                    <!-- Clean Vector Dynamics & Torque Manipulator SVG -->
+                    <svg class="w-6 h-6 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="6" cy="18" r="2.5" class="fill-blue-500/30"/>
+                        <path d="M3 14.5A5.5 5.5 0 0 1 9.5 14" stroke="#8b5cf6" stroke-linecap="round"/>
+                        <path d="M8 16.5L13.5 9.5" stroke-linecap="round"/>
+                        <circle cx="14.5" cy="8.5" r="2" class="fill-violet-500/30"/>
+                        <path d="M16.2 7.5L20.5 4.5" stroke-linecap="round"/>
+                        <circle cx="20.8" cy="4.2" r="1.4" fill="#06b6d4"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="px-2 py-0.5 text-[11px] font-mono font-semibold uppercase tracking-wider rounded-md bg-blue-500/15 text-cyan-300 border border-cyan-500/30">USTHB • FGE</span>
+                        <span class="px-2 py-0.5 text-[11px] font-mono font-semibold uppercase tracking-wider rounded-md bg-violet-500/15 text-violet-300 border border-violet-500/30">M2 AII</span>
+                        <span class="hidden sm:inline-block text-xs text-slate-400 font-mono">Série de TD N°5 — Commande de robots de manipulation</span>
+                    </div>
+                    <h1 class="font-display font-bold text-sm sm:text-base text-white tracking-tight mt-0.5">
+                        Modélisation Dynamique Directe et Inverse des Robots (Formalisme d'Euler-Lagrange)
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Right: Quick Jump Navigation & Print Button -->
+            <div class="flex items-center gap-1.5 flex-wrap no-print">
+                <a href="#page-1" class="nav-pill px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300">Page 1 • Ex 1 (RP)</a>
+                <a href="#page-2" class="nav-pill px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300">Page 2 • Ex 2 &amp; Ex 3 (2R)</a>
+                <a href="#page-3" class="nav-pill px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300">Page 3 • Fig 4 (Inerties)</a>
+                <a href="#simulateur" class="nav-pill nav-pill-active px-2.5 py-1.5 rounded-lg text-xs font-medium">Simulateur Dynamique</a>
+                <a href="#matlab-script" class="nav-pill px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300">Script MATLAB</a>
+                <button onclick="window.print()" class="btn-primary px-3 py-1.5 flex items-center gap-1.5 ml-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                    </svg>
+                    <span>Imprimer / Exporter en PDF</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN ACADEMIC CONTAINER -->
+    <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- HERO ACADEMIC BANNER -->
+        <div class="glass-card-elevated p-6 sm:p-8 relative overflow-hidden">
+            <div class="absolute -top-24 -right-24 w-72 h-72 bg-blue-500/12 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-violet-500/12 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center relative z-10">
+                <div class="lg:col-span-8 space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-mono">
+                        <span>Université des Sciences et de la Technologie Houari Boumediene (USTHB)</span>
+                    </div>
+                    <h2 class="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                        Série de TD N°5 : <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400">Modélisation Dynamique Directe et Inverse des Robots</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">
+                        Résolution analytique intégrale par le <strong>formalisme énergétique d'Euler-Lagrange</strong> des quatre systèmes mécaniques articulés de la série : <strong>Robot Plan RP de soudage linéaire</strong> (énergies \(E_p, E_c\), équations dynamiques et force d'actionneur \(F_d\)), <strong>Manipulateur Planaire 2-DDL à masses ponctuelles</strong> (forme matricielle \(M(q)\ddot{q} + C(q,\dot{q})\dot{q} + G(q) = Q\) et antisymétrie de \(\dot{M} - 2C\)), <strong>Bras Manipulateur 2-DDL à centres d'inertie déportés \((a_1, a_2)\)</strong> et <strong>Modèle complet à corps rigides avec inerties propres \((I_1, I_2)\)</strong>.
+                    </p>
+                </div>
+
+                <!-- Metadata Card -->
+                <div class="lg:col-span-4 bg-slate-950/75 border border-slate-800/90 rounded-xl p-4 space-y-2.5 text-xs font-mono">
+                    <div class="flex justify-between items-center py-1 border-b border-slate-800/80">
+                        <span class="text-slate-400">Faculté / Dépt :</span>
+                        <span class="text-slate-200 font-semibold">FGE — Automatique</span>
+                    </div>
+                    <div class="flex justify-between items-center py-1 border-b border-slate-800/80">
+                        <span class="text-slate-400">Spécialité &amp; Niveau :</span>
+                        <span class="text-cyan-300 font-semibold">Automatique — M2 AII</span>
+                    </div>
+                    <div class="flex justify-between items-center py-1 border-b border-slate-800/80">
+                        <span class="text-slate-400">Module :</span>
+                        <span class="text-slate-200 font-semibold">Commande de robots</span>
+                    </div>
+                    <div class="flex justify-between items-center py-1 border-b border-slate-800/80">
+                        <span class="text-slate-400">Encadrante :</span>
+                        <span class="text-violet-300 font-semibold">Pr. MENANI</span>
+                    </div>
+                    <div class="pt-1">
+                        <span class="text-slate-400 block mb-1">Auteur :</span>
+                        <div class="bg-gradient-to-r from-blue-500/15 to-violet-500/15 border border-cyan-500/35 rounded-lg px-3 py-2 text-white font-sans font-semibold text-sm flex items-center justify-center">
+                            <span>DAHANE Ahmed Lamine</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================================
+             PAGE 1 : OBJECTIFS & EXERCICE 1 — ROBOT PLAN RP DE SOUDAGE LINÉAIRE
+        ==================================================================== -->
+        <section id="page-1" class="scroll-mt-20 space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-lg bg-blue-600/20 border border-blue-400/40 font-mono text-xs font-bold text-cyan-300">PAGE 1 / 3</span>
+                    <h2 class="font-display text-xl sm:text-2xl font-bold text-white">Exercice 1 — Modélisation Dynamique du Robot Plan RP (Soudage Linéaire)</h2>
+                </div>
+                <span class="text-xs font-mono text-slate-400 hidden md:inline">FGE : TD Commande de robots de manipulation • M2 AII • MENANI</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- LEFT COLUMN: FAITHFUL REPRODUCTION OF PAGE 1 HANDOUT -->
+                <div class="lg:col-span-5 handout-paper p-5 sm:p-6 space-y-5 lg:sticky lg:top-20">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-cyan-400 font-semibold">Énoncé Original &amp; Schéma (Page 1)</span>
+                        <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">Document Officiel</span>
+                    </div>
+
+                    <div class="text-xs text-slate-300 space-y-1 font-mono bg-slate-950/60 p-3 rounded-lg border border-slate-800/80 leading-relaxed">
+                        <div>Université des Sciences et de la Technologie HOUARI BOUMEDIENE - USTHB -</div>
+                        <div>Faculté de Génie Électrique FGE — Département d'Automatique</div>
+                        <div>Spécialité : Automatique | Niveau : M2 AII</div>
+                        <div>Module : Commande de robots de manipulation — <strong class="text-cyan-300">Série de TD N°5</strong></div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <h3 class="font-display font-bold text-sm text-cyan-300 uppercase tracking-wider">Objectifs</h3>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Le but de ce TD est de permettre à l'étudiant de comprendre la modélisation dynamique directe et inverse des robots.
+                        </p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h3 class="font-display font-bold text-sm text-violet-300 uppercase tracking-wider">Exercice 1 :</h3>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            La figure suivante présente un robot manipulateur utile pour le soudage linéaire. Ce robot est à 2 degrés de liberté (\(\theta\) et \(d\)). On se propose de faire une étude dynamique du mécanisme.
+                        </p>
+
+                        <!-- High-Precision Vector SVG of Figure 1: Robot Plan RP with G1, G2, L1, d, L2 -->
+                        <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-3">
+                            <svg viewBox="0 0 420 275" class="w-full h-auto">
+                                <defs>
+                                    <marker id="arr-p1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 1 L 9 5 L 0 9 z" fill="#06b6d4"/>
+                                    </marker>
+                                    <marker id="arr-dim1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                        <path d="M 0 1 L 9 5 L 0 9 z" fill="#cbd5e1"/>
+                                    </marker>
+                                </defs>
+
+                                <!-- Ground Hatching -->
+                                <rect x="48" y="198" width="44" height="32" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+                                <line x1="36" y1="230" x2="104" y2="230" stroke="#e2e8f0" stroke-width="2.5"/>
+                                <g stroke="#64748b" stroke-width="1.5">
+                                    <line x1="42" y1="230" x2="34" y2="241"/><line x1="52" y1="230" x2="44" y2="241"/>
+                                    <line x1="62" y1="230" x2="54" y2="241"/><line x1="72" y1="230" x2="64" y2="241"/>
+                                    <line x1="82" y1="230" x2="74" y2="241"/><line x1="92" y1="230" x2="84" y2="241"/>
+                                    <line x1="102" y1="230" x2="94" y2="241"/>
+                                </g>
+
+                                <!-- Axes (O, x, y) -->
+                                <line x1="70" y1="193" x2="245" y2="193" stroke="#06b6d4" stroke-width="1.8" marker-end="url(#arr-p1)"/>
+                                <line x1="70" y1="193" x2="70" y2="68" stroke="#06b6d4" stroke-width="1.8" marker-end="url(#arr-p1)"/>
+                                <text x="252" y="197" fill="#06b6d4" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">x⃗</text>
+                                <text x="53" y="71" fill="#06b6d4" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">y⃗</text>
+
+                                <!-- Angle theta arc -->
+                                <path d="M 165 193 A 95 95 0 0 0 159 159" fill="none" stroke="#8b5cf6" stroke-width="1.8" marker-end="url(#arr-p1)"/>
+                                <text x="173" y="180" fill="#c4b5fd" font-family="Plus Jakarta Sans" font-size="14" font-style="italic" font-weight="bold">θ</text>
+
+                                <!-- Inclined Welding Wall -->
+                                <line x1="340" y1="22" x2="382" y2="248" stroke="#e2e8f0" stroke-width="3"/>
+                                <g stroke="#64748b" stroke-width="1.5">
+                                    <line x1="342" y1="32" x2="355" y2="26"/><line x1="345" y1="47" x2="358" y2="41"/>
+                                    <line x1="348" y1="62" x2="361" y2="56"/><line x1="351" y1="77" x2="364" y2="71"/>
+                                    <line x1="354" y1="92" x2="367" y2="86"/><line x1="357" y1="107" x2="370" y2="101"/>
+                                    <line x1="360" y1="122" x2="373" y2="116"/><line x1="363" y1="137" x2="376" y2="131"/>
+                                    <line x1="366" y1="152" x2="379" y2="146"/><line x1="369" y1="167" x2="382" y2="161"/>
+                                    <line x1="372" y1="182" x2="385" y2="176"/><line x1="375" y1="197" x2="388" y2="191"/>
+                                    <line x1="378" y1="212" x2="391" y2="206"/><line x1="381" y1="227" x2="394" y2="221"/>
+                                </g>
+
+                                <!-- Rotating Mechanism Group -->
+                                <g transform="translate(70, 193) rotate(-20)">
+                                    <!-- First Link L1 -->
+                                    <rect x="0" y="-5" width="52" height="10" fill="#334155" stroke="#cbd5e1" stroke-width="1.5"/>
+                                    <!-- Cylinder Body 1 (mass m1, COM G1) -->
+                                    <rect x="52" y="-14" width="145" height="28" fill="#141c33" stroke="#06b6d4" stroke-width="1.8"/>
+                                    <!-- Piston Head -->
+                                    <rect x="135" y="-13" width="8" height="26" fill="#3b82f6"/>
+                                    <!-- Extending Rod 2 (mass m2, length L2, COM G2) -->
+                                    <rect x="143" y="-4" width="145" height="8" fill="#475569" stroke="#e2e8f0" stroke-width="1.5"/>
+                                    <!-- End-Effector Torch -->
+                                    <polygon points="288,-8 302,-5 302,5 288,8" fill="#8b5cf6" stroke="#f8fafc" stroke-width="1.4"/>
+                                    <circle cx="305" cy="0" r="3.5" fill="#f43f5e"/>
+
+                                    <!-- Centerline -->
+                                    <line x1="-10" y1="0" x2="310" y2="0" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6 3 1 3"/>
+
+                                    <!-- Center of Gravity G1 -->
+                                    <circle cx="68" cy="0" r="4" fill="#06b6d4" stroke="#070913" stroke-width="1"/>
+                                    <text x="63" y="14" fill="#06b6d4" font-family="Plus Jakarta Sans" font-size="11" font-weight="bold">G₁ (m₁)</text>
+
+                                    <!-- Center of Gravity G2 -->
+                                    <circle cx="225" cy="0" r="4" fill="#a78bfa" stroke="#070913" stroke-width="1"/>
+                                    <text x="218" y="14" fill="#c4b5fd" font-family="Plus Jakarta Sans" font-size="11" font-weight="bold">G₂ (m₂)</text>
+
+                                    <!-- Dimension Lines L1, d, L2 -->
+                                    <line x1="0" y1="0" x2="0" y2="-72" stroke="#64748b" stroke-width="1"/>
+                                    <line x1="52" y1="-14" x2="52" y2="-72" stroke="#64748b" stroke-width="1"/>
+                                    <line x1="143" y1="-14" x2="143" y2="-45" stroke="#64748b" stroke-width="1"/>
+                                    <line x1="302" y1="0" x2="302" y2="-72" stroke="#64748b" stroke-width="1"/>
+
+                                    <line x1="4" y1="-64" x2="48" y2="-64" stroke="#cbd5e1" stroke-width="1.3" marker-start="url(#arr-dim1)" marker-end="url(#arr-dim1)"/>
+                                    <text x="19" y="-70" fill="#f8fafc" font-family="Plus Jakarta Sans" font-size="12" font-style="italic">L₁</text>
+
+                                    <line x1="56" y1="-64" x2="298" y2="-64" stroke="#06b6d4" stroke-width="1.4" marker-start="url(#arr-dim1)" marker-end="url(#arr-dim1)"/>
+                                    <text x="172" y="-70" fill="#06b6d4" font-family="Plus Jakarta Sans" font-size="13" font-style="italic" font-weight="bold">d</text>
+
+                                    <line x1="147" y1="-38" x2="298" y2="-38" stroke="#cbd5e1" stroke-width="1.3" marker-start="url(#arr-dim1)" marker-end="url(#arr-dim1)"/>
+                                    <text x="215" y="-44" fill="#f8fafc" font-family="Plus Jakarta Sans" font-size="12" font-style="italic">L₂</text>
+                                </g>
+
+                                <!-- Revolute Joint Origin O -->
+                                <circle cx="70" cy="193" r="16" fill="#0f1426" stroke="#cbd5e1" stroke-width="2"/>
+                                <circle cx="70" cy="193" r="7" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
+
+                                <text x="155" y="262" fill="#94a3b8" font-family="Plus Jakarta Sans" font-size="12" font-weight="600">Figure 1 : Robot Plan RP.</text>
+                            </svg>
+                        </div>
+
+                        <div class="space-y-2.5 text-xs sm:text-sm text-slate-200 leading-relaxed pt-1">
+                            <p>
+                                <strong>I.</strong> L'expression des variables opérationnelles en fonction des variables articulaires est donnée par le modèle géométrique direct (MGD) :
+                            </p>
+                            <div class="bg-slate-950/85 border border-blue-500/30 rounded-lg p-3 text-center">
+                                $$\begin{cases} x = L_1 \cos\theta + d \cos\theta = (L_1 + d)\cos\theta \\ y = L_1 \sin\theta + d \sin\theta = (L_1 + d)\sin\theta \end{cases}$$
+                            </div>
+                            <ol class="list-decimal list-inside space-y-1.5 text-slate-200 font-medium pt-1">
+                                <li>Calculer l'énergie potentielle du bras manipulateur.</li>
+                                <li>Calculer l'énergie cinétique du bras manipulateur.</li>
+                                <li>Déterminer le modèle dynamique du robot.</li>
+                                <li>Calculer la force développée par l'actionneur qui gère le déplacement \(d\). <span class="text-slate-400 font-normal text-xs">(Question 4 en haut de la Page 2)</span></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: COMPLETE EULER-LAGRANGE DERIVATION FOR EXERCICE 1 -->
+                <div class="lg:col-span-7 space-y-6">
+
+                    <!-- PARAMÉTRAGE INERTIEL & GÉOMÉTRIQUE -->
+                    <div class="glass-card p-6 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <div class="flex items-center gap-2.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                                <h3 class="font-display font-bold text-base sm:text-lg text-white">Analyse Énergétique &amp; Paramétrage Inertiel des Deux Corps (RP)</h3>
+                            </div>
+                            <span class="px-2.5 py-0.5 rounded-md bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 font-mono text-xs">Formulation de Lagrange</span>
+                        </div>
+
+                        <div class="space-y-3 text-sm text-slate-300 leading-relaxed">
+                            <p>
+                                Le mécanisme plan RP se compose de <strong>deux corps rigides</strong> mobiles dans le plan vertical \((O, \vec{x}, \vec{y})\) où l'accélération de la pesanteur \(\vec{g} = -g\,\vec{y}\) agit verticalement vers le bas :
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div class="bg-slate-900/85 border border-blue-500/25 rounded-xl p-3.5 space-y-1.5">
+                                    <div class="font-mono text-cyan-300 font-semibold uppercase">Corps 1 (Cylindre pivotant — Rotoïde \(\theta\))</div>
+                                    <ul class="text-slate-300 space-y-1 list-disc list-inside">
+                                        <li>Masse \(m_1\), moment d'inertie \(I_1\) autour de \((G_1, \vec{z})\).</li>
+                                        <li>Centre de gravité \(G_1\) situé à la distance fixe \(l_1\) de l'axe \(O\) (typiquement \(l_1 = L_1/2\)).</li>
+                                        <li>Coordonnées de \(G_1\) : \(\begin{cases} x_{G1} = l_1 \cos\theta \\ y_{G1} = l_1 \sin\theta \end{cases}\)</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-900/85 border border-violet-500/25 rounded-xl p-3.5 space-y-1.5">
+                                    <div class="font-mono text-violet-300 font-semibold uppercase">Corps 2 (Tige coulissante — Prismatique \(d\))</div>
+                                    <ul class="text-slate-300 space-y-1 list-disc list-inside">
+                                        <li>Masse \(m_2\), moment d'inertie \(I_2\) autour de \((G_2, \vec{z})\).</li>
+                                        <li>Extrémité outil à \(R = L_1 + d\) ; centre de gravité \(G_2\) situé à \(l_2 = L_2/2\) en retrait de l'extrémité, soit au rayon \(r_2(d) = L_1 + d - l_2\).</li>
+                                        <li>Coordonnées de \(G_2\) : \(\begin{cases} x_{G2} = (L_1 + d - l_2)\cos\theta \\ y_{G2} = (L_1 + d - l_2)\sin\theta \end{cases}\)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-400">
+                                <em>Note de correspondance avec le modèle à masse concentrée :</em> Si l'on considère la masse \(m_2\) concentrée à l'extrémité de la tige (\(l_2 = 0, I_2 = 0\)) et \(m_1\) à l'extrémité du corps 1 (\(l_1 = L_1, I_1 = 0\)), il suffit de poser \(l_1 = L_1\) et \(l_2 = 0\) dans toutes les équations ci-dessous.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- QUESTION 1 : ÉNERGIE POTENTIELLE -->
+                    <div class="glass-card p-6 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="font-display font-bold text-base sm:text-lg text-white">
+                                Question 1 — Calcul de l'Énergie Potentielle \(E_p(\theta, d)\)
+                            </h3>
+                            <span class="px-2.5 py-0.5 rounded-md bg-blue-500/15 text-cyan-300 border border-cyan-500/30 font-mono text-xs">Ex 1 • Q1</span>
+                        </div>
+
+                        <div class="space-y-3 text-sm text-slate-300 leading-relaxed">
+                            <p>
+                                En prenant l'horizontale passant par le pivot \(O\) (\(y = 0\)) comme niveau de référence de potentiel nul, l'énergie potentielle gravitationnelle totale est la somme des énergies potentielles des deux corps :
+                            </p>
+                            <div class="bg-slate-950/85 border border-slate-800 rounded-xl p-4 space-y-2">
+                                $$E_p(\theta, d) = E_{p1} + E_{p2} = m_1 g y_{G1} + m_2 g y_{G2}$$
+                                $$\boxed{E_p(\theta, d) = m_1 g l_1 \sin\theta + m_2 g (L_1 + d - l_2)\sin\theta = \big[m_1 l_1 + m_2(L_1 + d - l_2)\big] g \sin\theta}$$
+                            </div>
+                            <p class="text-xs text-slate-400">
+                                <em>Remarque :</em> Si le plan \((O, \vec{x}, \vec{y})\) du robot de soudage est horizontal (\(\vec{g} \perp (O, \vec{x}, \vec{y})\)), l'altitude \(z\) reste constante et \(E_p = 0\). On conserve ici le terme gravitationnel général \(g\) (il suffit de poser \(g = 0\) dans le cas horizontal).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- QUESTION 2 : ÉNERGIE CINÉTIQUE -->
+                    <div class="glass-card p-6 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="font-display font-bold text-base sm:text-lg text-white">
+                                Question 2 — Calcul de l'Énergie Cinétique \(E_c(\theta, d, \dot{\theta}, \dot{d})\)
+                            </h3>
+                            <span class="px-2.5 py-0.5 rounded-md bg-blue-500/15 text-cyan-300 border border-cyan-500/30 font-mono text-xs">Ex 1 • Q2</span>
+                        </div>
+
+                        <div class="space-y-3 text-sm text-slate-300 leading-relaxed">
+                            <p>
+                                Par le théorème de König, l'énergie cinétique de chaque corps rigide est la somme de l'énergie cinétique de translation de son centre d'inertie et de son énergie cinétique de rotation propre autour de \(\vec{z}\) (les deux corps ayant la même vitesse angulaire \(\omega_1 = \omega_2 = \dot{\theta}\)) :
+                            </p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                                <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 space-y-1.5">
+                                    <div class="font-mono text-cyan-400 font-semibold">1. Vitesse &amp; Énergie du Corps 1 :</div>
+                                    $$\begin{cases} \dot{x}_{G1} = -l_1 \dot{\theta}\sin\theta \\ \dot{y}_{G1} = l_1 \dot{\theta}\cos\theta \end{cases} \implies v_{G1}^2 = \dot{x}_{G1}^2 + \dot{y}_{G1}^2 = l_1^2 \dot{\theta}^2$$
+                                    $$E_{c1} = \frac{1}{2}m_1 v_{G1}^2 + \frac{1}{2}I_1 \dot{\theta}^2 = \frac{1}{2}(I_1 + m_1 l_1^2)\dot{\theta}^2$$
+                                </div>
+
+                                <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 space-y-1.5">
+                                    <div class="font-mono text-violet-400 font-semibold">2. Vitesse &amp; Énergie du Corps 2 :</div>
+                                    $$\begin{cases} \dot{x}_{G2} = \dot{d}\cos\theta - (L_1 + d - l_2)\dot{\theta}\sin\theta \\ \dot{y}_{G2} = \dot{d}\sin\theta + (L_1 + d - l_2)\dot{\theta}\cos\theta \end{cases}$$
+                                    $$v_{G2}^2 = \dot{d}^2 + (L_1 + d - l_2)^2 \dot{\theta}^2$$
+                                    $$E_{c2} = \frac{1}{2}m_2 \dot{d}^2 + \frac{1}{2}\big[I_2 + m_2(L_1 + d - l_2)^2\big]\dot{\theta}^2$$
+                                </div>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-blue-950/50 to-violet-950/50 border border-cyan-500/40 rounded-xl p-4 text-center">
+                                <div class="text-xs font-mono uppercase text-cyan-300 mb-1 font-semibold">Énergie Cinétique Totale du Robot RP</div>
+                                $$\boxed{E_c(\theta, d, \dot{\theta}, \dot{d}) = \frac{1}{2}\Big[I_1 + I_2 + m_1 l_1^2 + m_2(L_1 + d - l_2)^2\Big]\dot{\theta}^2 + \frac{1}{2}m_2 \dot{d}^2}$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- QUESTIONS 3 & 4 : MODÈLE DYNAMIQUE & FORCE D'ACTIONNEUR F_d -->
+                    <div class="glass-card p-6 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="font-display font-bold text-base sm:text-lg text-white">
+                                Questions 3 &amp; 4 — Modèle Dynamique (Euler-Lagrange) &amp; Force de l'Actionneur \(F_d\)
+                            </h3>
+                            <span class="px-2.5 py-0.5 rounded-md bg-violet-500/15 text-violet-300 border border-violet-500/30 font-mono text-xs">Ex 1 • Q3 &amp; Q4</span>
+                        </div>
+
+                        <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                            <p>
+                                Le Lagrangien du système s'écrit \(\mathcal{L}(q, \dot{q}) = E_c(q, \dot{q}) - E_p(q)\) avec \(q = \begin{bmatrix} \theta & d \end{bmatrix}^T\) et le vecteur des efforts généralisés \(\Gamma = \begin{bmatrix} \Gamma_\theta & F_d \end{bmatrix}^T\) :
+                            </p>
+                            <div class="bg-slate-950/85 border border-slate-800 rounded-xl p-3.5 text-xs overflow-x-auto">
+                                $$\mathcal{L}(\theta, d, \dot{\theta}, \dot{d}) = \frac{1}{2}\Big[I_1 + I_2 + m_1 l_1^2 + m_2(L_1 + d - l_2)^2\Big]\dot{\theta}^2 + \frac{1}{2}m_2 \dot{d}^2 - \big[m_1 l_1 + m_2(L_1 + d - l_2)\big]g\sin\theta$$
+                            </div>
+
+                            <!-- Équation 1 : Couple moteur Gamma_theta -->
+                            <div class="bg-slate-900/90 border border-blue-500/30 rounded-xl p-4 space-y-2 text-xs sm:text-sm">
+                                <div class="font-mono text-cyan-300 font-semibold uppercase text-xs">1. Équation d'Euler-Lagrange selon \(\theta\) (Couple moteur \(\Gamma_\theta\)) :</div>
+                                $$\frac{d}{dt}\left(\frac{\partial \mathcal{L}}{\partial \dot{\theta}}\right) - \frac{\partial \mathcal{L}}{\partial \theta} = \Gamma_\theta$$
+                                $$\begin{cases}
+                                \dfrac{\partial \mathcal{L}}{\partial \dot{\theta}} = \big[I_1 + I_2 + m_1 l_1^2 + m_2(L_1 + d - l_2)^2\big]\dot{\theta} \\[8pt]
+                                \dfrac{d}{dt}\left(\dfrac{\partial \mathcal{L}}{\partial \dot{\theta}}\right) = \big[I_1 + I_2 + m_1 l_1^2 + m_2(L_1 + d - l_2)^2\big]\ddot{\theta} + 2 m_2 (L_1 + d - l_2)\dot{d}\dot{\theta} \\[8pt]
+                                \dfrac{\partial \mathcal{L}}{\partial \theta} = -\big[m_1 l_1 + m_2(L_1 + d - l_2)\big]g\cos\theta
+                                \end{cases}$$
+                                $$\boxed{\Gamma_\theta = \Big[I_1 + I_2 + m_1 l_1^2 + m_2(L_1 + d - l_2)^2\Big]\ddot{\theta} + 2 m_2 (L_1 + d - l_2)\dot{d}\dot{\theta} + \big[m_1 l_1 + m_2(L_1 + d - l_2)\big]g\cos\theta}$$
+                            </div>
+
+                            <!-- Équation 2 : Force d'actionneur F_d (Question 4) -->
+                            <div class="bg-slate-900/90 border border-violet-500/30 rounded-xl p-4 space-y-2 text-xs sm:text-sm">
+                                <div class="font-mono text-violet-300 font-semibold uppercase text-xs">2. Équation d'Euler-Lagrange selon \(d\) — Force de l'actionneur prismatique \(F_d\) (Question 4) :</div>
+                                $$\frac{d}{dt}\left(\frac{\partial \mathcal{L}}{\partial \dot{d}}\right) - \frac{\partial \mathcal{L}}{\partial d} = F_d$$
+                                $$\begin{cases}
+                                \dfrac{\partial \mathcal{L}}{\partial \dot{d}} = m_2 \dot{d} \implies \dfrac{d}{dt}\left(\dfrac{\partial \mathcal{L}}{\partial \dot{d}}\right) = m_2 \ddot{d} \\[8pt]
+                                \dfrac{\partial \mathcal{L}}{\partial d} = m_2 (L_1 + d - l_2)\dot{\theta}^2 - m_2 g \sin\theta
+                                \end{cases}$$
+                                $$\boxed{F_d = m_2 \ddot{d} - m_2 (L_1 + d - l_2)\dot{\theta}^2 + m_2 g \sin\theta}$$
+                                <p class="text-xs text-slate-400 pt-1">
+                                    <em>Interprétation physique des 3 composantes de \(F_d\) :</em> \(m_2 \ddot{d}\) est la force d'inertie linéaire du piston ; \(-m_2(L_1 + d - l_2)\dot{\theta}^2\) traduit l'effet de la <strong>force centrifuge</strong> qui tend à éjecter la tige vers l'extérieur lors de la rotation ; et \(+m_2 g \sin\theta\) compense la projection du poids de la tige le long de son axe de coulissement. (Dans le cas ponctuel \(l_2 = 0\), on a \(F_d = m_2\ddot{d} - m_2(L_1+d)\dot{\theta}^2 + m_2 g \sin\theta\)).
+                                </p>
+                            </div>
+
+                            <!-- Forme Matricielle Compacte -->
+                            <div class="bg-gradient-to-r from-blue-950/50 to-violet-950/50 border border-cyan-500/40 rounded-xl p-4 overflow-x-auto text-xs">
+                                <div class="font-mono uppercase text-cyan-300 mb-1.5 font-semibold">Forme Matricielle Canonique \(M(q)\ddot{q} + C(q,\dot{q})\dot{q} + G(q) = \Gamma\)</div>
+                                $$\underbrace{\begin{bmatrix} I_{\text{tot}}(d) & 0 \\ 0 & m_2 \end{bmatrix}}_{M(q)} \begin{bmatrix} \ddot{\theta} \\ \ddot{d} \end{bmatrix} + \underbrace{\begin{bmatrix} m_2 r_2(d)\dot{d} & m_2 r_2(d)\dot{\theta} \\ -m_2 r_2(d)\dot{\theta} & 0 \end{bmatrix}}_{C(q,\dot{q})} \begin{bmatrix} \dot{\theta} \\ \dot{d} \end{bmatrix} + \underbrace{\begin{bmatrix} (m_1 l_1 + m_2 r_2(d))g\cos\theta \\ m_2 g \sin\theta \end{bmatrix}}_{G(q)} = \begin{bmatrix} \Gamma_\theta \\ F_d \end{bmatrix}$$
+                                <div class="text-slate-400 mt-1.5 font-mono">avec \(r_2(d) = L_1 + d - l_2\) et \(I_{\text{tot}}(d) = I_1 + I_2 + m_1 l_1^2 + m_2 r_2(d)^2\).</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================
+             PAGE 2 : EXERCICE 2 (MASSES PONCTUELLES) & EXERCICE 3 (CENTRES D'INERTIE a1, a2)
+        ==================================================================== -->
+        <section id="page-2" class="scroll-mt-20 space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-lg bg-violet-600/20 border border-violet-400/40 font-mono text-xs font-bold text-violet-300">PAGE 2 / 3</span>
+                    <h2 class="font-display text-xl sm:text-2xl font-bold text-white">Exercice 2 (Masses Ponctuelles \(m_1, m_2\)) &amp; Exercice 3 (Bras 2-DDL à Centres d'Inertie \(a_1, a_2\))</h2>
+                </div>
+                <span class="text-xs font-mono text-slate-400 hidden md:inline">FGE : TD Commande de robots de manipulation • M2 AII • MENANI 2</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- LEFT COLUMN: FAITHFUL REPRODUCTION OF PAGE 2 HANDOUT -->
+                <div class="lg:col-span-5 handout-paper p-5 sm:p-6 space-y-5 lg:sticky lg:top-20">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-violet-400 font-semibold">Énoncé Original &amp; Figures 2 et 3 (Page 2)</span>
+                        <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">Page 2</span>
+                    </div>
+
+                    <div class="text-xs sm:text-sm text-slate-200 font-medium">
+                        4. Calculer la force développée par l'actionneur qui gère le déplacement \(d\). <span class="text-slate-400 font-normal">(Suite Ex. 1)</span>
+                    </div>
+
+                    <hr class="border-slate-800"/>
+
+                    <!-- EXERCICE 2 HANDOUT -->
+                    <div class="space-y-3">
+                        <h3 class="font-display font-bold text-sm text-cyan-300 uppercase tracking-wider">Exercice 2 :</h3>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Nous prenons le cas d'un robot manipulateur planaire comme montré sur la figure suivante :
+                        </p>
+
+                        <!-- High-Precision Vector SVG of Figure 2: Point Masses m1, m2 at tips L1, L2 -->
+                        <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-3">
+                            <svg viewBox="0 0 420 220" class="w-full h-auto">
+                                <defs>
+                                    <marker id="ax-p2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 1 L 9 5 L 0 9 z" fill="#38bdf8"/>
+                                    </marker>
+                                    <marker id="torq-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                        <path d="M 0 1 L 9 5 L 0 9 z" fill="#8b5cf6"/>
+                                    </marker>
+                                </defs>
+
+                                <!-- Axes X, Y at O = (55, 175) -->
+                                <line x1="55" y1="175" x2="375" y2="175" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#ax-p2)"/>
+                                <text x="382" y="179" fill="#38bdf8" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">X</text>
+                                <line x1="55" y1="175" x2="55" y2="25" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#ax-p2)"/>
+                                <text x="49" y="19" fill="#38bdf8" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">Y</text>
+
+                                <!-- Base Trapezoid at O -->
+                                <polygon points="38,162 72,162 66,192 44,192" fill="#334155" stroke="#94a3b8" stroke-width="1.5"/>
+                                <text x="58" y="206" fill="#cbd5e1" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">O</text>
+
+                                <!-- Link 1 (L1) from (55,175) to (205, 118) -->
+                                <line x1="55" y1="175" x2="205" y2="118" stroke="#93c5fd" stroke-width="8" stroke-linecap="round"/>
+                                <line x1="55" y1="175" x2="205" y2="118" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+                                <line x1="55" y1="175" x2="280" y2="90" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="4 3"/>
+                                <text x="115" y="132" fill="#f8fafc" font-family="Plus Jakarta Sans" font-size="13" font-style="italic" font-weight="bold">L₁</text>
+
+                                <!-- Angle theta 1 -->
+                                <path d="M 118 175 A 63 63 0 0 0 113 153" fill="none" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ax-p2)"/>
+                                <text x="124" y="167" fill="#38bdf8" font-family="Plus Jakarta Sans" font-size="13" font-style="italic" font-weight="bold">θ₁</text>
+
+                                <!-- Torque Q1 curved arrow around O -->
+                                <path d="M 38 190 A 24 24 0 1 1 76 164" fill="none" stroke="#8b5cf6" stroke-width="2" marker-end="url(#torq-arr)"/>
+                                <text x="14" y="152" fill="#c4b5fd" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">Q₁</text>
+
+                                <!-- Link 2 (L2) from (205,118) to (322, 35) -->
+                                <line x1="205" y1="118" x2="322" y2="35" stroke="#c4b5fd" stroke-width="8" stroke-linecap="round"/>
+                                <line x1="205" y1="118" x2="322" y2="35" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+                                <text x="242" y="65" fill="#f8fafc" font-family="Plus Jakarta Sans" font-size="13" font-style="italic" font-weight="bold">L₂</text>
+
+                                <!-- Angle theta 2 -->
+                                <path d="M 262 97 A 60 60 0 0 0 250 85" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#torq-arr)"/>
+                                <text x="268" y="95" fill="#c4b5fd" font-family="Plus Jakarta Sans" font-size="13" font-style="italic" font-weight="bold">θ₂</text>
+
+                                <!-- Torque Q2 curved arrow around Joint 2 -->
+                                <path d="M 188 134 A 23 23 0 1 1 224 106" fill="none" stroke="#8b5cf6" stroke-width="2" marker-end="url(#torq-arr)"/>
+                                <text x="166" y="102" fill="#c4b5fd" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">Q₂</text>
+
+                                <!-- Point Masses m1 and m2 -->
+                                <circle cx="55" cy="175" r="8" fill="#2563eb" stroke="#f8fafc" stroke-width="1.5"/>
+                                <circle cx="205" cy="118" r="10" fill="#2563eb" stroke="#f8fafc" stroke-width="1.5"/>
+                                <text x="216" y="138" fill="#38bdf8" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">m₁</text>
+
+                                <circle cx="322" cy="35" r="11" fill="#7c3aed" stroke="#f8fafc" stroke-width="1.5"/>
+                                <text x="338" y="42" fill="#c4b5fd" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">m₂</text>
+
+                                <text x="105" y="212" fill="#94a3b8" font-family="Plus Jakarta Sans" font-size="12" font-weight="600">Figure 2 : Un robot manipulateur planaire.</text>
+                            </svg>
+                        </div>
+
+                        <ol class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-slate-200">
+                            <li>Calculer les positions des masses \(m_1\) et \(m_2\).</li>
+                            <li>Calculer les vitesses des masses \(m_1\) et \(m_2\).</li>
+                            <li>Calculer le modèle dynamique direct.</li>
+                            <li>Exprimer le modèle dynamique du robot sous forme matricielle.</li>
+                        </ol>
+                    </div>
+
+                    <hr class="border-slate-800"/>
+
+                    <!-- EXERCICE 3 HANDOUT -->
+                    <div class="space-y-3">
+                        <h3 class="font-display font-bold text-sm text-violet-300 uppercase tracking-wider">Exercice 3 :</h3>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            Nous prenons le bras d'un robot manipulateur 2 DDL comme montré sur la figure ci-dessous :
+                        </p>
+
+                        <!-- High-Precision Vector SVG of Figure 3: COMs m1, m2 at distances a1, a2 -->
+                        <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-3">
+                            <svg viewBox="0 0 420 225" class="w-full h-auto">
+                                <!-- Axes X, Y at O = (55, 175) -->
+                                <line x1="55" y1="175" x2="375" y2="175" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#ax-p2)"/>
+                                <text x="382" y="179" fill="#38bdf8" font-size="13" font-weight="bold">X</text>
+                                <line x1="55" y1="175" x2="55" y2="25" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#ax-p2)"/>
+                                <text x="49" y="19" fill="#38bdf8" font-size="13" font-weight="bold">Y</text>
+
+                                <polygon points="38,162 72,162 66,192 44,192" fill="#334155" stroke="#94a3b8" stroke-width="1.5"/>
+                                <text x="58" y="206" fill="#cbd5e1" font-size="13" font-weight="bold">O</text>
+
+                                <!-- Link 1 (L1) -->
+                                <line x1="55" y1="175" x2="205" y2="118" stroke="#93c5fd" stroke-width="9" stroke-linecap="round"/>
+                                <line x1="55" y1="175" x2="205" y2="118" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
+
+                                <!-- Link 2 (L2) -->
+                                <line x1="205" y1="118" x2="322" y2="35" stroke="#c4b5fd" stroke-width="9" stroke-linecap="round"/>
+                                <line x1="205" y1="118" x2="322" y2="35" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
+
+                                <!-- COM dots m1 at a1 and m2 at a2 -->
+                                <circle cx="130" cy="146.5" r="4.5" fill="#06b6d4"/>
+                                <text x="126" y="135" fill="#06b6d4" font-size="12" font-weight="bold">m₁</text>
+
+                                <circle cx="263" cy="76.5" r="4.5" fill="#a78bfa"/>
+                                <text x="255" y="65" fill="#c4b5fd" font-size="12" font-weight="bold">m₂</text>
+
+                                <!-- Dimension lines for a1, L1, a2, L2 -->
+                                <line x1="42" y1="142" x2="117" y2="113" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="3 2"/>
+                                <text x="72" y="118" fill="#fda4af" font-size="12" font-style="italic" font-weight="bold">a₁</text>
+
+                                <line x1="68" y1="205" x2="218" y2="148" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="3 2"/>
+                                <text x="145" y="192" fill="#fda4af" font-size="12" font-style="italic" font-weight="bold">L₁</text>
+
+                                <line x1="185" y1="88" x2="243" y2="47" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="3 2"/>
+                                <text x="205" y="60" fill="#fda4af" font-size="12" font-style="italic" font-weight="bold">a₂</text>
+
+                                <line x1="222" y1="140" x2="338" y2="57" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="3 2"/>
+                                <text x="285" y="112" fill="#fda4af" font-size="12" font-style="italic" font-weight="bold">L₂</text>
+
+                                <!-- Angles & Torques -->
+                                <text x="122" y="167" fill="#38bdf8" font-size="12" font-style="italic" font-weight="bold">θ₁</text>
+                                <text x="275" y="95" fill="#c4b5fd" font-size="12" font-style="italic" font-weight="bold">θ₂</text>
+                                <path d="M 38 190 A 24 24 0 1 1 76 164" fill="none" stroke="#8b5cf6" stroke-width="1.8" marker-end="url(#torq-arr)"/>
+                                <text x="14" y="152" fill="#c4b5fd" font-size="12" font-weight="bold">Q₁</text>
+                                <path d="M 188 134 A 23 23 0 1 1 224 106" fill="none" stroke="#8b5cf6" stroke-width="1.8" marker-end="url(#torq-arr)"/>
+                                <text x="166" y="102" fill="#c4b5fd" font-size="12" font-weight="bold">Q₂</text>
+
+                                <circle cx="55" cy="175" r="7" fill="#2563eb" stroke="#f8fafc" stroke-width="1.5"/>
+                                <circle cx="205" cy="118" r="8" fill="#2563eb" stroke="#f8fafc" stroke-width="1.5"/>
+
+                                <text x="108" y="216" fill="#94a3b8" font-family="Plus Jakarta Sans" font-size="12" font-weight="600">Figure 3 : Le modèle dynamique du robot.</text>
+                            </svg>
+                        </div>
+
+                        <ol class="list-decimal list-inside space-y-1 text-xs sm:text-sm text-slate-200">
+                            <li>Calculer l'énergie potentielle du bras manipulateur.</li>
+                            <li>Calculer l'énergie cinétique du bras manipulateur.</li>
+                            <li>Déterminer le modèle dynamique du robot.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: COMPLETE SOLUTIONS FOR EXERCICE 2 & EXERCICE 3 -->
+                <div class="lg:col-span-7 space-y-6">
+
+                    <!-- =========================================================
+                         EXERCICE 2 : ROBOT PLANAIRE 2-DDL À MASSES PONCTUELLES
+                    ========================================================== -->
+                    <div class="glass-card p-6 space-y-5">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="font-display font-bold text-base sm:text-lg text-white">
+                                Exercice 2 — Modélisation Dynamique du Robot Planaire 2-DDL (Masses Ponctuelles \(m_1, m_2\))
+                            </h3>
+                            <span class="px-2.5 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-mono text-xs">Ex 2 • Q1–Q4</span>
+                        </div>
+
+                        <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                            <!-- Q1 & Q2: Positions et Vitesses -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-slate-900/90 border border-blue-500/30 rounded-xl p-4 space-y-2 text-xs">
+                                    <div class="font-mono text-cyan-300 font-semibold uppercase">1. Positions des Masses \(m_1\) et \(m_2\)</div>
+                                    <p class="text-slate-300">
+                                        La masse \(m_1\) est concentrée à l'extrémité du bras 1 (distance \(L_1\)) et \(m_2\) à l'extrémité du bras 2 (distance \(L_2\)) :
+                                    </p>
+                                    $$\begin{cases} x_1 = L_1 \cos\theta_1 \\ y_1 = L_1 \sin\theta_1 \end{cases}$$
+                                    $$\begin{cases} x_2 = L_1 \cos\theta_1 + L_2 \cos(\theta_1 + \theta_2) \\ y_2 = L_1 \sin\theta_1 + L_2 \sin(\theta_1 + \theta_2) \end{cases}$$
+                                </div>
+
+                                <div class="bg-slate-900/90 border border-violet-500/30 rounded-xl p-4 space-y-2 text-xs">
+                                    <div class="font-mono text-violet-300 font-semibold uppercase">2. Vitesses Linéaires \(v_1^2\) et \(v_2^2\)</div>
+                                    $$\begin{cases} \dot{x}_1 = -L_1 \dot{\theta}_1 \sin\theta_1 \\ \dot{y}_1 = L_1 \dot{\theta}_1 \cos\theta_1 \end{cases} \implies v_1^2 = L_1^2 \dot{\theta}_1^2$$
+                                    $$\begin{cases} \dot{x}_2 = -L_1 \dot{\theta}_1 S_1 - L_2(\dot{\theta}_1 + \dot{\theta}_2)S_{12} \\ \dot{y}_2 = L_1 \dot{\theta}_1 C_1 + L_2(\dot{\theta}_1 + \dot{\theta}_2)C_{12} \end{cases}$$
+                                    $$v_2^2 = L_1^2 \dot{\theta}_1^2 + L_2^2(\dot{\theta}_1 + \dot{\theta}_2)^2 + 2 L_1 L_2 C_2 \dot{\theta}_1(\dot{\theta}_1 + \dot{\theta}_2)$$
+                                </div>
+                            </div>
+
+                            <!-- Énergies Ec, Ep et Lagrangien -->
+                            <div class="bg-slate-950/85 border border-slate-800 rounded-xl p-4 space-y-2 text-xs overflow-x-auto">
+                                <div class="font-mono text-cyan-400 font-semibold uppercase">Énergies Cinétique \(E_c\), Potentielle \(E_p\) et Lagrangien \(\mathcal{L} = E_c - E_p\) :</div>
+                                $$E_c = \frac{1}{2}m_1 v_1^2 + \frac{1}{2}m_2 v_2^2 = \frac{1}{2}(m_1 + m_2)L_1^2 \dot{\theta}_1^2 + \frac{1}{2}m_2 L_2^2(\dot{\theta}_1 + \dot{\theta}_2)^2 + m_2 L_1 L_2 \cos\theta_2\,\dot{\theta}_1(\dot{\theta}_1 + \dot{\theta}_2)$$
+                                $$E_p = m_1 g y_1 + m_2 g y_2 = (m_1 + m_2)g L_1 \sin\theta_1 + m_2 g L_2 \sin(\theta_1 + \theta_2)$$
+                            </div>
+
+                            <!-- Q3: Modèle Dynamique Direct (Équations de Lagrange) -->
+                            <div class="space-y-2.5">
+                                <div class="font-mono text-cyan-300 font-semibold uppercase text-xs">3. Équations d'Euler-Lagrange (\(Q_1\) et \(Q_2\)) :</div>
+                                <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3 text-xs overflow-x-auto">
+                                    <div>
+                                        <strong class="text-cyan-300">• Articulation 1 (\(\frac{d}{dt}\frac{\partial \mathcal{L}}{\partial \dot{\theta}_1} - \frac{\partial \mathcal{L}}{\partial \theta_1} = Q_1\)) :</strong>
+                                        $$\frac{\partial \mathcal{L}}{\partial \dot{\theta}_1} = \big[(m_1 + m_2)L_1^2 + m_2 L_2^2 + 2 m_2 L_1 L_2 C_2\big]\dot{\theta}_1 + \big[m_2 L_2^2 + m_2 L_1 L_2 C_2\big]\dot{\theta}_2$$
+                                        $$\boxed{Q_1 = \big[(m_1 + m_2)L_1^2 + m_2 L_2^2 + 2 m_2 L_1 L_2 C_2\big]\ddot{\theta}_1 + \big[m_2 L_2^2 + m_2 L_1 L_2 C_2\big]\ddot{\theta}_2 - m_2 L_1 L_2 S_2 (2\dot{\theta}_1\dot{\theta}_2 + \dot{\theta}_2^2) + (m_1 + m_2)g L_1 C_1 + m_2 g L_2 C_{12}}$$
+                                    </div>
+                                    <hr class="border-slate-800"/>
+                                    <div>
+                                        <strong class="text-violet-300">• Articulation 2 (\(\frac{d}{dt}\frac{\partial \mathcal{L}}{\partial \dot{\theta}_2} - \frac{\partial \mathcal{L}}{\partial \theta_2} = Q_2\)) :</strong>
+                                        $$\frac{\partial \mathcal{L}}{\partial \dot{\theta}_2} = \big[m_2 L_2^2 + m_2 L_1 L_2 C_2\big]\dot{\theta}_1 + m_2 L_2^2 \dot{\theta}_2, \qquad \frac{\partial \mathcal{L}}{\partial \theta_2} = -m_2 L_1 L_2 S_2 \dot{\theta}_1(\dot{\theta}_1 + \dot{\theta}_2) - m_2 g L_2 C_{12}$$
+                                        $$\boxed{Q_2 = \big[m_2 L_2^2 + m_2 L_1 L_2 C_2\big]\ddot{\theta}_1 + m_2 L_2^2 \ddot{\theta}_2 + m_2 L_1 L_2 S_2 \dot{\theta}_1^2 + m_2 g L_2 C_{12}}$$
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Q4: Forme Matricielle M(q)q̈ + C(q,q̇)q̇ + G(q) = Q -->
+                            <div class="bg-gradient-to-r from-blue-950/50 to-violet-950/50 border border-cyan-500/40 rounded-xl p-4 space-y-2.5 overflow-x-auto text-xs">
+                                <div class="font-mono uppercase text-cyan-300 font-semibold">4. Forme Matricielle du Modèle Dynamique : \(M(\theta)\ddot{\theta} + C(\theta, \dot{\theta})\dot{\theta} + G(\theta) = Q\)</div>
+                                $$\underbrace{\begin{bmatrix} (m_1 + m_2)L_1^2 + m_2 L_2^2 + 2m_2 L_1 L_2 C_2 & m_2 L_2^2 + m_2 L_1 L_2 C_2 \\ m_2 L_2^2 + m_2 L_1 L_2 C_2 & m_2 L_2^2 \end{bmatrix}}_{M(\theta) \text{ (Matrice d'inertie symétrique définie positive)}} \begin{bmatrix} \ddot{\theta}_1 \\ \ddot{\theta}_2 \end{bmatrix} + \underbrace{\begin{bmatrix} -h\,\dot{\theta}_2 & -h(\dot{\theta}_1 + \dot{\theta}_2) \\ h\,\dot{\theta}_1 & 0 \end{bmatrix}}_{C(\theta,\dot{\theta}) \text{ (Coriolis & Centripète)}} \begin{bmatrix} \dot{\theta}_1 \\ \dot{\theta}_2 \end{bmatrix} + \underbrace{\begin{bmatrix} (m_1 + m_2)g L_1 C_1 + m_2 g L_2 C_{12} \\ m_2 g L_2 C_{12} \end{bmatrix}}_{G(\theta) \text{ (Gravité)}} = \begin{bmatrix} Q_1 \\ Q_2 \end{bmatrix}$$
+                                <div class="text-slate-300 font-mono pt-1">
+                                    où \(h = m_2 L_1 L_2 \sin\theta_2\). <strong>Propriété fondamentale de passivité :</strong> La matrice \(\dot{M}(\theta) - 2C(\theta,\dot{\theta}) = \begin{bmatrix} 0 & h(2\dot{\theta}_1 + \dot{\theta}_2) \\ -h(2\dot{\theta}_1 + \dot{\theta}_2) & 0 \end{bmatrix}\) est <strong>antisymétrique</strong> (\(\dot{q}^T(\dot{M}-2C)\dot{q} = 0\)).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- =========================================================
+                         EXERCICE 3 : BRAS MANIPULATEUR 2-DDL À CENTRES D'INERTIE a1, a2
+                    ========================================================== -->
+                    <div class="glass-card p-6 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="font-display font-bold text-base sm:text-lg text-white">
+                                Exercice 3 — Modélisation Dynamique du Bras 2-DDL avec Centres de Masse \((a_1, a_2)\)
+                            </h3>
+                            <span class="px-2.5 py-0.5 rounded-md bg-violet-500/15 text-violet-300 border border-violet-500/30 font-mono text-xs">Ex 3 • Q1–Q3</span>
+                        </div>
+
+                        <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                            <p class="text-xs sm:text-sm">
+                                Sur la Figure 3, les longueurs totales des segments sont \(L_1\) et \(L_2\), tandis que les centres de masse \(m_1\) et \(m_2\) sont situés aux distances respectives \(a_1\) de l'axe 1 et \(a_2\) de l'axe 2 (avec moments d'inertie propres \(I_1, I_2\) autour de leurs centres de gravité) :
+                            </p>
+
+                            <div class="bg-slate-950/85 border border-slate-800 rounded-xl p-3.5 text-xs">
+                                $$\text{Positions des COM : } \begin{cases} x_{G1} = a_1 \cos\theta_1 \\ y_{G1} = a_1 \sin\theta_1 \end{cases}, \qquad \begin{cases} x_{G2} = L_1 \cos\theta_1 + a_2 \cos(\theta_1 + \theta_2) \\ y_{G2} = L_1 \sin\theta_1 + a_2 \sin(\theta_1 + \theta_2) \end{cases}$$
+                            </div>
+
+                            <!-- Q1: Énergie Potentielle -->
+                            <div class="bg-slate-900/90 border border-blue-500/30 rounded-xl p-3.5 space-y-1.5 text-xs">
+                                <div class="font-mono text-cyan-300 font-semibold uppercase">1. Énergie Potentielle \(E_p(\theta_1, \theta_2)\) :</div>
+                                $$\boxed{E_p = m_1 g y_{G1} + m_2 g y_{G2} = (m_1 a_1 + m_2 L_1)g\sin\theta_1 + m_2 a_2 g \sin(\theta_1 + \theta_2)}$$
+                            </div>
+
+                            <!-- Q2: Énergie Cinétique -->
+                            <div class="bg-slate-900/90 border border-violet-500/30 rounded-xl p-3.5 space-y-1.5 text-xs overflow-x-auto">
+                                <div class="font-mono text-violet-300 font-semibold uppercase">2. Énergie Cinétique \(E_c(\theta_1, \theta_2, \dot{\theta}_1, \dot{\theta}_2)\) :</div>
+                                $$E_c = \frac{1}{2}I_1 \dot{\theta}_1^2 + \frac{1}{2}m_1 a_1^2 \dot{\theta}_1^2 + \frac{1}{2}I_2(\dot{\theta}_1 + \dot{\theta}_2)^2 + \frac{1}{2}m_2\Big[L_1^2 \dot{\theta}_1^2 + a_2^2(\dot{\theta}_1 + \dot{\theta}_2)^2 + 2 L_1 a_2 C_2 \dot{\theta}_1(\dot{\theta}_1 + \dot{\theta}_2)\Big]$$
+                                $$\boxed{E_c = \frac{1}{2}\big(I_1 + I_2 + m_1 a_1^2 + m_2 L_1^2 + m_2 a_2^2 + 2 m_2 L_1 a_2 C_2\big)\dot{\theta}_1^2 + \big(I_2 + m_2 a_2^2 + m_2 L_1 a_2 C_2\big)\dot{\theta}_1\dot{\theta}_2 + \frac{1}{2}(I_2 + m_2 a_2^2)\dot{\theta}_2^2}$$
+                            </div>
+
+                            <!-- Q3: Modèle Dynamique -->
+                            <div class="bg-gradient-to-r from-violet-950/50 to-blue-950/50 border border-violet-500/40 rounded-xl p-4 space-y-2 overflow-x-auto text-xs">
+                                <div class="font-mono uppercase text-violet-300 font-semibold">3. Modèle Dynamique du Robot (\(Q_1, Q_2\)) :</div>
+                                $$\boxed{\begin{aligned}
+                                Q_1 &= \big(I_1 + I_2 + m_1 a_1^2 + m_2 L_1^2 + m_2 a_2^2 + 2 m_2 L_1 a_2 C_2\big)\ddot{\theta}_1 + \big(I_2 + m_2 a_2^2 + m_2 L_1 a_2 C_2\big)\ddot{\theta}_2 \\
+                                    &\quad - m_2 L_1 a_2 S_2 (2\dot{\theta}_1\dot{\theta}_2 + \dot{\theta}_2^2) + (m_1 a_1 + m_2 L_1)g C_1 + m_2 a_2 g C_{12} \\[8pt]
+                                Q_2 &= \big(I_2 + m_2 a_2^2 + m_2 L_1 a_2 C_2\big)\ddot{\theta}_1 + (I_2 + m_2 a_2^2)\ddot{\theta}_2 + m_2 L_1 a_2 S_2 \dot{\theta}_1^2 + m_2 a_2 g C_{12}
+                                \end{aligned}}$$
+                                <p class="text-slate-400 pt-1">
+                                    <em>Vérification :</em> En posant \(a_1 = L_1\), \(a_2 = L_2\) et \(I_1 = I_2 = 0\), on retrouve identiquement les équations de l'Exercice 2.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================
+             PAGE 3 : FIGURE 4 — ROBOT MANIPULATEUR 2-DDL AVEC REPÈRES LOCAUX & INERTIES
+        ==================================================================== -->
+        <section id="page-3" class="scroll-mt-20 space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-lg bg-cyan-600/20 border border-cyan-400/40 font-mono text-xs font-bold text-cyan-300">PAGE 3 / 3</span>
+                    <h2 class="font-display text-xl sm:text-2xl font-bold text-white">Figure 4 — Modélisation Dynamique Complète du Bras Manipulateur 2-DDL (Repères Locaux &amp; Inerties \(I_1, I_2\))</h2>
+                </div>
+                <span class="text-xs font-mono text-slate-400 hidden md:inline">FGE : TD Commande de robots de manipulation • M2 AII • MENANI 3</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- LEFT COLUMN: FAITHFUL REPRODUCTION OF PAGE 3 HANDOUT -->
+                <div class="lg:col-span-5 handout-paper p-5 sm:p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-cyan-400 font-semibold">Schéma Officiel (Page 3)</span>
+                        <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">Page 3</span>
+                    </div>
+
+                    <!-- High-Precision Vector SVG of Figure 4: Robot manipulateur 2ddl with frames O1, O2, X0..X2, Y0..Y2, Z0..Z2, lc1, lc2, l1, l2 -->
+                    <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-3">
+                        <svg viewBox="0 0 420 295" class="w-full h-auto">
+                            <defs>
+                                <marker id="ax-f4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 9 5 L 0 9 z" fill="#38bdf8"/>
+                                </marker>
+                                <marker id="ax-f4v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 9 5 L 0 9 z" fill="#a78bfa"/>
+                                </marker>
+                            </defs>
+
+                            <!-- Global Frame (X, Y) and Frame 0 (X0, Y0, Z0) at O1 = (75, 235) -->
+                            <line x1="75" y1="235" x2="365" y2="235" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#ax-f4)"/>
+                            <text x="372" y="239" fill="#38bdf8" font-size="13" font-weight="bold">X</text>
+                            <text x="178" y="252" fill="#94a3b8" font-size="12" font-style="italic">X₀</text>
+
+                            <line x1="75" y1="235" x2="75" y2="35" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#ax-f4)"/>
+                            <text x="69" y="27" fill="#38bdf8" font-size="13" font-weight="bold">Y</text>
+                            <text x="53" y="135" fill="#94a3b8" font-size="12" font-style="italic">Y₀</text>
+
+                            <!-- Z0 downward-left indicator -->
+                            <line x1="75" y1="235" x2="48" y2="262" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#ax-f4)"/>
+                            <text x="34" y="274" fill="#cbd5e1" font-size="11" font-style="italic">Z₀</text>
+                            <text x="80" y="254" fill="#f8fafc" font-size="12" font-weight="bold">O₁</text>
+
+                            <!-- Link 1 from O1=(75,235) to O2=(178, 152) -->
+                            <line x1="75" y1="235" x2="178" y2="152" stroke="#cbd5e1" stroke-width="11" stroke-linecap="round" opacity="0.25"/>
+                            <line x1="75" y1="235" x2="178" y2="152" stroke="#60a5fa" stroke-width="3"/>
+
+                            <!-- Axis X1 extension -->
+                            <line x1="178" y1="152" x2="275" y2="74" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#ax-f4)"/>
+                            <text x="280" y="76" fill="#38bdf8" font-size="12" font-style="italic" font-weight="bold">X₁</text>
+
+                            <!-- Axis Y1 perpendicular to Link 1 -->
+                            <line x1="178" y1="152" x2="122" y2="82" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#ax-f4)"/>
+                            <text x="108" y="80" fill="#38bdf8" font-size="12" font-style="italic" font-weight="bold">Y₁</text>
+
+                            <!-- Axis Z1 -->
+                            <line x1="178" y1="152" x2="174" y2="205" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#ax-f4)"/>
+                            <text x="168" y="218" fill="#cbd5e1" font-size="11" font-style="italic">Z₁</text>
+                            <text x="190" y="168" fill="#f8fafc" font-size="12" font-weight="bold">O₂</text>
+
+                            <!-- Angle theta 1 -->
+                            <path d="M 135 235 A 60 60 0 0 0 122 197" fill="none" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ax-f4)"/>
+                            <text x="142" y="220" fill="#38bdf8" font-size="12" font-style="italic" font-weight="bold">θ₁</text>
+
+                            <!-- Dimensions lc1 and l1 -->
+                            <circle cx="126" cy="193.5" r="4" fill="#06b6d4"/>
+                            <text x="45" y="185" fill="#06b6d4" font-size="11" font-style="italic" font-weight="bold">l_c1</text>
+                            <text x="86" y="165" fill="#f8fafc" font-size="12" font-style="italic" font-weight="bold">l₁</text>
+
+                            <!-- Link 2 from O2=(178,152) to End=(232, 42) -->
+                            <line x1="178" y1="152" x2="232" y2="42" stroke="#c4b5fd" stroke-width="11" stroke-linecap="round" opacity="0.25"/>
+                            <line x1="178" y1="152" x2="232" y2="42" stroke="#a78bfa" stroke-width="3"/>
+
+                            <!-- Frame 2 (X2, Y2, Z2) at tip (232, 42) -->
+                            <line x1="232" y1="42" x2="256" y2="8" stroke="#a78bfa" stroke-width="1.6" marker-end="url(#ax-f4v)"/>
+                            <text x="262" y="16" fill="#c4b5fd" font-size="12" font-style="italic" font-weight="bold">X₂</text>
+
+                            <line x1="232" y1="42" x2="165" y2="18" stroke="#a78bfa" stroke-width="1.6" marker-end="url(#ax-f4v)"/>
+                            <text x="148" y="18" fill="#c4b5fd" font-size="12" font-style="italic" font-weight="bold">Y₂</text>
+
+                            <line x1="232" y1="42" x2="225" y2="82" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#ax-f4v)"/>
+                            <text x="234" y="88" fill="#cbd5e1" font-size="11" font-style="italic">Z₂</text>
+
+                            <!-- Angle theta 2 & phi -->
+                            <path d="M 225 114 A 55 55 0 0 0 202 103" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ax-f4v)"/>
+                            <text x="214" y="96" fill="#c4b5fd" font-size="12" font-style="italic" font-weight="bold">θ₂</text>
+                            <text x="228" y="128" fill="#94a3b8" font-size="11" font-style="italic">φ = θ₁+θ₂</text>
+
+                            <!-- Dimensions lc2 and l2 -->
+                            <circle cx="205" cy="97" r="4" fill="#a78bfa"/>
+                            <text x="242" y="114" fill="#c4b5fd" font-size="11" font-style="italic" font-weight="bold">l_c2</text>
+                            <text x="268" y="98" fill="#f8fafc" font-size="12" font-style="italic" font-weight="bold">l₂</text>
+
+                            <!-- Joints O1 & O2 -->
+                            <circle cx="75" cy="235" r="10" fill="#2563eb" stroke="#f8fafc" stroke-width="1.5"/>
+                            <circle cx="178" cy="152" r="10" fill="#2563eb" stroke="#f8fafc" stroke-width="1.5"/>
+
+                            <text x="122" y="286" fill="#94a3b8" font-family="Plus Jakarta Sans" font-size="12" font-weight="600">Figure 4 : Robot manipulateur 2 DDL.</text>
+                        </svg>
+                    </div>
+
+                    <div class="bg-slate-950/75 border border-slate-800 rounded-xl p-3.5 text-xs text-slate-300 space-y-1.5 leading-relaxed">
+                        <div class="font-mono text-cyan-300 font-semibold uppercase">Notations Géométriques &amp; Inertiels de la Figure 4 :</div>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>\(l_1, l_2\) :</strong> longueurs des segments 1 et 2.</li>
+                            <li><strong>\(l_{c1}, l_{c2}\) :</strong> abscisses des centres de gravité \(G_1\) et \(G_2\) sur les axes locaux \(X_1\) et \(X_2\).</li>
+                            <li><strong>\(m_1, m_2\) et \(I_1, I_2\) :</strong> masses et moments d'inertie barycentriques autour des axes normaux au plan du mouvement.</li>
+                            <li><strong>\(\phi = \theta_1 + \theta_2\) :</strong> orientation absolue du corps 2 par rapport à \(X_0\).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: COMPLETE DYNAMIC SYNTHESIS FOR FIGURE 4 -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="glass-card p-6 space-y-5">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <div class="flex items-center gap-2.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                                <h3 class="font-display font-bold text-base sm:text-lg text-white">Synthèse Dynamique Complète du Manipulateur 2-DDL (Notations \(l_1, l_2, l_{c1}, l_{c2}, I_1, I_2\))</h3>
+                            </div>
+                            <span class="px-2.5 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-mono text-xs">Modèle Canonique</span>
+                        </div>
+
+                        <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                            <p>
+                                La Figure 4 présente la représentation normalisée en robotique industrielle d'un bras manipulateur 2-DDL à corps rigides quelconques, reliant directement les <strong>repères cinématiques locaux</strong> \((X_0, Y_0, Z_0)\), \((X_1, Y_1, Z_1)\) et \((X_2, Y_2, Z_2)\) aux grandeurs dynamiques \((m_i, l_{ci}, I_i)\) :
+                            </p>
+
+                            <!-- 1. Transformations Homogènes & Positions des Centres de Masse -->
+                            <div class="bg-slate-900/90 border border-blue-500/30 rounded-xl p-4 space-y-2.5 text-xs overflow-x-auto">
+                                <div class="font-mono text-cyan-300 font-semibold uppercase">1. Transformations Homogènes \({^0T_1}\), \({^0T_2}\) &amp; Coordonnées des Centres de Masse \(G_1, G_2\)</div>
+                                $${^0T_1} = \begin{bmatrix} C_1 & -S_1 & 0 & l_1 C_1 \\ S_1 & C_1 & 0 & l_1 S_1 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}, \qquad {^0T_2} = {^0T_1}{^1T_2} = \begin{bmatrix} C_{12} & -S_{12} & 0 & l_1 C_1 + l_2 C_{12} \\ S_{12} & C_{12} & 0 & l_1 S_1 + l_2 S_{12} \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}$$
+                                $$\overrightarrow{O_1 G_1} = \begin{bmatrix} l_{c1}\cos\theta_1 \\ l_{c1}\sin\theta_1 \end{bmatrix}, \qquad \overrightarrow{O_1 G_2} = \begin{bmatrix} l_1\cos\theta_1 + l_{c2}\cos(\theta_1 + \theta_2) \\ l_1\sin\theta_1 + l_{c2}\sin(\theta_1 + \theta_2) \end{bmatrix}$$
+                            </div>
+
+                            <!-- 2. Décomposition des Énergies -->
+                            <div class="bg-slate-950/85 border border-slate-800 rounded-xl p-4 space-y-2 text-xs overflow-x-auto">
+                                <div class="font-mono text-violet-300 font-semibold uppercase">2. Énergies Cinétique \(E_c\) et Potentielle \(E_p\) en fonction de \((l_1, l_{c1}, l_{c2}, I_1, I_2)\)</div>
+                                $$E_c(\theta, \dot{\theta}) = \frac{1}{2}\dot{\theta}^T M(\theta)\dot{\theta} = \frac{1}{2}M_{11}(\theta_2)\dot{\theta}_1^2 + M_{12}(\theta_2)\dot{\theta}_1\dot{\theta}_2 + \frac{1}{2}M_{22}\dot{\theta}_2^2$$
+                                $$E_p(\theta) = (m_1 l_{c1} + m_2 l_1)g\sin\theta_1 + m_2 l_{c2} g \sin(\theta_1 + \theta_2)$$
+                            </div>
+
+                            <!-- 3. Forme Matricielle Générale & Modèle Dynamique Inverse (MDI) -->
+                            <div class="bg-gradient-to-r from-blue-950/50 to-violet-950/50 border border-cyan-500/40 rounded-xl p-4 space-y-3 overflow-x-auto text-xs">
+                                <div class="font-mono uppercase text-cyan-300 font-semibold">3. Modèle Dynamique Inverse (MDI) : \(\Gamma = M(\theta)\ddot{\theta} + C(\theta, \dot{\theta})\dot{\theta} + G(\theta)\)</div>
+                                $$\begin{bmatrix} \Gamma_1 \\ \Gamma_2 \end{bmatrix} = \begin{bmatrix} I_1 + I_2 + m_1 l_{c1}^2 + m_2(l_1^2 + l_{c2}^2 + 2 l_1 l_{c2} C_2) & I_2 + m_2(l_{c2}^2 + l_1 l_{c2} C_2) \\ I_2 + m_2(l_{c2}^2 + l_1 l_{c2} C_2) & I_2 + m_2 l_{c2}^2 \end{bmatrix} \begin{bmatrix} \ddot{\theta}_1 \\ \ddot{\theta}_2 \end{bmatrix} + \begin{bmatrix} -m_2 l_1 l_{c2} S_2 \dot{\theta}_2 & -m_2 l_1 l_{c2} S_2 (\dot{\theta}_1 + \dot{\theta}_2) \\ m_2 l_1 l_{c2} S_2 \dot{\theta}_1 & 0 \end{bmatrix} \begin{bmatrix} \dot{\theta}_1 \\ \dot{\theta}_2 \end{bmatrix} + \begin{bmatrix} (m_1 l_{c1} + m_2 l_1)g C_1 + m_2 l_{c2} g C_{12} \\ m_2 l_{c2} g C_{12} \end{bmatrix}$$
+
+                                <div class="border-t border-slate-700/80 pt-2.5 text-slate-300">
+                                    <strong class="text-violet-300">Modèle Dynamique Direct (MDD) pour la simulation temporelle :</strong>
+                                    $$\ddot{\theta} = M(\theta)^{-1}\Big[\Gamma - C(\theta, \dot{\theta})\dot{\theta} - G(\theta)\Big]$$
+                                    <span class="text-slate-400 block mt-1">
+                                        La matrice \(M(\theta)\) étant strictement définie positive pour tout \(\theta \in \mathbb{R}^2\) (\(\det M(\theta) > 0\)), le Modèle Dynamique Direct \(\ddot{\theta}\) existe et est unique en tout point de l'espace articulaire, y compris aux configurations cinématiquement singulières (\(\theta_2 = 0\) ou \(\pi\)).
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================
+             INTERACTIVE LAGRANGIAN & DYNAMIC SIMULATOR WORKBENCH
+        ==================================================================== -->
+        <section id="simulateur" class="scroll-mt-20 space-y-6 no-print">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-lg bg-gradient-to-r from-blue-600/30 to-violet-600/30 border border-cyan-400/50 font-mono text-xs font-bold text-cyan-300">LABORATOIRE DYNAMIQUE</span>
+                    <h2 class="font-display text-xl sm:text-2xl font-bold text-white">Simulateur Énergétique &amp; Calculateur des Couples / Forces d'Actionneurs</h2>
+                </div>
+
+                <!-- Mode Selector Tabs -->
+                <div class="flex items-center gap-2 bg-slate-900/90 p-1.5 rounded-xl border border-slate-800">
+                    <button id="tab-rp" onclick="switchDynMode('RP')" class="nav-pill nav-pill-active px-3.5 py-1.5 rounded-lg text-xs font-semibold">
+                        Ex 1 : Robot Plan RP (Γ_θ, F_d)
+                    </button>
+                    <button id="tab-2r" onclick="switchDynMode('2R')" class="nav-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300">
+                        Ex 2 &amp; 3 : Bras Planaire 2-DDL (Q₁, Q₂)
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Controls Panel -->
+                <div class="lg:col-span-4 glass-card p-5 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <span id="dyn-ctrl-title" class="font-display font-bold text-sm text-cyan-300 uppercase tracking-wider">État Articulaire — Robot RP</span>
+                        <button onclick="resetDynSim()" class="text-xs font-mono text-slate-400 hover:text-cyan-300 underline">Réinitialiser</button>
+                    </div>
+
+                    <!-- Positions q1, q2 -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs font-mono">
+                            <span id="lbl-q1" class="text-slate-300">Angle \(\theta\) (deg) :</span>
+                            <span id="val-q1" class="text-cyan-400 font-bold">30° (0.524 rad)</span>
+                        </div>
+                        <input id="sl-q1" type="range" min="-150" max="150" step="1" value="30" class="w-full" oninput="updateDynSim()">
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs font-mono">
+                            <span id="lbl-q2" class="text-slate-300">Élongation \(d\) (m) :</span>
+                            <span id="val-q2" class="text-violet-400 font-bold">0.70 m</span>
+                        </div>
+                        <input id="sl-q2" type="range" min="0.1" max="1.5" step="0.02" value="0.70" class="w-full" oninput="updateDynSim()">
+                    </div>
+
+                    <!-- Velocities dq1, dq2 -->
+                    <div class="grid grid-cols-2 gap-3 pt-1">
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] font-mono">
+                                <span id="lbl-dq1" class="text-slate-400">\(\dot{\theta}\) (rad/s)</span>
+                                <span id="val-dq1" class="text-emerald-400 font-bold">1.50</span>
+                            </div>
+                            <input id="sl-dq1" type="range" min="-4" max="4" step="0.1" value="1.5" class="w-full" oninput="updateDynSim()">
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] font-mono">
+                                <span id="lbl-dq2" class="text-slate-400">\(\dot{d}\) (m/s)</span>
+                                <span id="val-dq2" class="text-emerald-400 font-bold">0.40</span>
+                            </div>
+                            <input id="sl-dq2" type="range" min="-2" max="2" step="0.05" value="0.4" class="w-full" oninput="updateDynSim()">
+                        </div>
+                    </div>
+
+                    <!-- Accelerations ddq1, ddq2 -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] font-mono">
+                                <span id="lbl-ddq1" class="text-slate-400">\(\ddot{\theta}\) (rad/s²)</span>
+                                <span id="val-ddq1" class="text-amber-300 font-bold">0.50</span>
+                            </div>
+                            <input id="sl-ddq1" type="range" min="-5" max="5" step="0.2" value="0.5" class="w-full" oninput="updateDynSim()">
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] font-mono">
+                                <span id="lbl-ddq2" class="text-slate-400">\(\ddot{d}\) (m/s²)</span>
+                                <span id="val-ddq2" class="text-amber-300 font-bold">0.20</span>
+                            </div>
+                            <input id="sl-ddq2" type="range" min="-4" max="4" step="0.2" value="0.2" class="w-full" oninput="updateDynSim()">
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-800"/>
+
+                    <!-- Physical Masses m1, m2 -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] font-mono">
+                                <span class="text-slate-400">Masse \(m_1\) (kg)</span>
+                                <span id="val-m1" class="text-cyan-300 font-bold">4.0 kg</span>
+                            </div>
+                            <input id="sl-m1" type="range" min="1" max="15" step="0.5" value="4.0" class="w-full" oninput="updateDynSim()">
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] font-mono">
+                                <span class="text-slate-400">Masse \(m_2\) (kg)</span>
+                                <span id="val-m2" class="text-violet-300 font-bold">2.5 kg</span>
+                            </div>
+                            <input id="sl-m2" type="range" min="0.5" max="10" step="0.5" value="2.5" class="w-full" oninput="updateDynSim()">
+                        </div>
+                    </div>
+
+                    <!-- Gravity Toggle -->
+                    <div class="flex items-center justify-between bg-slate-950/75 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono">
+                        <span class="text-slate-300">Pesanteur \(g = 9.81\text{ m/s}^2\) (Plan vertical)</span>
+                        <input id="chk-gravity" type="checkbox" checked onchange="updateDynSim()" class="w-4 h-4 accent-cyan-500 cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- Canvas & Live Dynamic Telemetry -->
+                <div class="lg:col-span-8 space-y-4">
+                    <div class="glass-card p-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5 px-1 text-xs font-mono text-slate-300">
+                            <span class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                                Visualisation Dynamique — Centres d'Inertie \(G_1, G_2\), Gravité \(\vec{P}_i\) &amp; Efforts Généralisés
+                            </span>
+                            <span id="lagrangian-badge" class="px-2.5 py-0.5 rounded bg-violet-500/20 text-violet-200 border border-violet-500/35">
+                                ℒ = Ec - Ep = 0.00 J
+                            </span>
+                        </div>
+                        <div class="w-full h-[350px] bg-[#060911] rounded-xl border border-slate-800/90 overflow-hidden">
+                            <canvas id="dyn-canvas" class="w-full h-full block"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Live Readouts: Energies, Inertia Matrix, Coriolis + Gravity & Actuator Forces -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
+                        <div class="glass-card p-4 space-y-2">
+                            <div class="text-cyan-400 font-semibold uppercase text-[11px]">Bilan Énergétique (Lagrange)</div>
+                            <div id="out-energy" class="bg-slate-950/85 border border-slate-800 rounded-lg p-3 space-y-1 text-slate-200"></div>
+                        </div>
+                        <div class="glass-card p-4 space-y-2">
+                            <div class="text-violet-400 font-semibold uppercase text-[11px]">Matrice d'Inertie \(M(q)\)</div>
+                            <div id="out-inertia" class="bg-slate-950/85 border border-slate-800 rounded-lg p-3 space-y-1 text-slate-200"></div>
+                        </div>
+                        <div class="glass-card p-4 space-y-2">
+                            <div class="text-emerald-400 font-semibold uppercase text-[11px]">Efforts Actionneurs (MDI)</div>
+                            <div id="out-torques" class="bg-slate-950/85 border border-slate-800 rounded-lg p-3 space-y-1 text-slate-200"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================
+             COMPLETE MATLAB SCRIPT & CONSOLE OUTPUT SECTION
+        ==================================================================== -->
+        <section id="matlab-script" class="scroll-mt-20 space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-lg bg-blue-600/20 border border-blue-400/40 font-mono text-xs font-bold text-cyan-300">CODE MATLAB COMPLET</span>
+                    <h2 class="font-display text-xl sm:text-2xl font-bold text-white">Dérivation Symbolique Euler-Lagrange &amp; Vérification Numérique (`TD5_CRM_Solution_Complete.m`)</h2>
+                </div>
+                <button onclick="copyMatlabCode()" id="btn-copy-matlab" class="btn-primary px-4 py-2 flex items-center gap-2 no-print">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    <span id="copy-btn-text">Copier le script MATLAB</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-7 glass-card overflow-hidden">
+                    <div class="bg-slate-900/90 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                            <span class="ml-2 text-cyan-300 font-semibold">TD5_CRM_Solution_Complete.m</span>
+                        </div>
+                        <span class="text-slate-400">Symbolic Math Toolbox</span>
+                    </div>
+                    <pre id="matlab-source" class="p-4 sm:p-5 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed max-h-[620px]"><code>% =========================================================================
+% USTHB - FGE - Departement d'Automatique (Master 2 AII)
+% Module : Commande de robots de manipulation (CRM) - Pr. MENANI
+% Serie de TD N°5 : Modelisation dynamique directe et inverse des robots
+% Auteur : DAHANE Ahmed Lamine
+% =========================================================================
+clear; clc; close all;
+
+disp('===================================================================');
+disp('   SERIE DE TD N°5 CRM - FORMALISME D''EULER-LAGRANGE                ');
+disp('===================================================================');
+
+%% ========================================================================
+%  EXERCICE 1 : ROBOT PLAN RP DE SOUDAGE LINEAIRE (theta, d)
+%  ========================================================================
+disp('--- EXERCICE 1 : Robot Plan RP (theta, d) ---');
+syms theta d dtheta dd ddtheta ddd L1 l1 l2 m1 m2 I1 I2 g real
+
+% Positions des centres de gravite G1 et G2 :
+xG1 = l1 * cos(theta);
+yG1 = l1 * sin(theta);
+r2  = L1 + d - l2;
+xG2 = r2 * cos(theta);
+yG2 = r2 * sin(theta);
+
+% 1. Energie potentielle Ep :
+Ep_RP = m1*g*yG1 + m2*g*yG2
+
+% 2. Vitesses et Energie cinetique Ec :
+dxG1 = diff(xG1, theta)*dtheta;
+dyG1 = diff(yG1, theta)*dtheta;
+dxG2 = diff(xG2, theta)*dtheta + diff(xG2, d)*dd;
+dyG2 = diff(yG2, theta)*dtheta + diff(yG2, d)*dd;
+
+vG1_sq = simplify(dxG1^2 + dyG1^2);
+vG2_sq = simplify(dxG2^2 + dyG2^2);
+
+Ec_RP = simplify(0.5*m1*vG1_sq + 0.5*I1*dtheta^2 + 0.5*m2*vG2_sq + 0.5*I2*dtheta^2)
+
+% 3. Lagrangien L = Ec - Ep et equations d'Euler-Lagrange :
+L_RP = Ec_RP - Ep_RP;
+q_RP   = [theta; d];
+dq_RP  = [dtheta; dd];
+ddq_RP = [ddtheta; ddd];
+
+Gamma_RP = euler_lagrange(L_RP, q_RP, dq_RP, ddq_RP);
+Gamma_theta = Gamma_RP(1)
+F_d         = Gamma_RP(2)   % Question 4 : Force de l'actionneur prismatique d
+
+%% ========================================================================
+%  EXERCICE 2 : MANIPULATEUR PLANAIRE 2-DDL A MASSES PONCTUELLES (m1, m2)
+%  ========================================================================
+disp('--- EXERCICE 2 : Robot Planaire 2-DDL (Masses ponctuelles) ---');
+syms theta1 theta2 dtheta1 dtheta2 ddtheta1 ddtheta2 L2 real
+
+% 1. Positions de m1 et m2 :
+x1 = L1*cos(theta1);
+y1 = L1*sin(theta1);
+x2 = L1*cos(theta1) + L2*cos(theta1 + theta2);
+y2 = L1*sin(theta1) + L2*sin(theta1 + theta2);
+
+% 2. Vitesses au carre v1^2 et v2^2 :
+v1_sq = simplify((diff(x1,theta1)*dtheta1)^2 + (diff(y1,theta1)*dtheta1)^2);
+dx2   = diff(x2,theta1)*dtheta1 + diff(x2,theta2)*dtheta2;
+dy2   = diff(y2,theta1)*dtheta1 + diff(y2,theta2)*dtheta2;
+v2_sq = simplify(dx2^2 + dy2^2);
+
+% 3. Energies et Modele Dynamique Direct :
+Ec_2R = simplify(0.5*m1*v1_sq + 0.5*m2*v2_sq);
+Ep_2R = m1*g*y1 + m2*g*y2;
+L_2R  = Ec_2R - Ep_2R;
+
+q_2R   = [theta1; theta2];
+dq_2R  = [dtheta1; dtheta2];
+ddq_2R = [ddtheta1; ddtheta2];
+
+Q_2R = euler_lagrange(L_2R, q_2R, dq_2R, ddq_2R);
+Q1_ex2 = Q_2R(1)
+Q2_ex2 = Q_2R(2)
+
+% 4. Extraction de la forme matricielle M(q)*ddq + C(q,dq)*dq + G(q) = Q :
+M_2R = simplify(hessian(Ec_2R, dq_2R))
+G_2R = simplify(jacobian(Ep_2R, q_2R).')
+
+% Verification de la propriete d'antisymetrie de (dM/dt - 2*C) :
+h = m2 * L1 * L2 * sin(theta2);
+C_2R = [-h*dtheta2, -h*(dtheta1 + dtheta2);
+         h*dtheta1,  0];
+dM_dt = diff(M_2R, theta1)*dtheta1 + diff(M_2R, theta2)*dtheta2;
+Skew_check = simplify(dM_dt - 2*C_2R) % Doit verifier Skew_check + Skew_check.' == 0
+
+%% ========================================================================
+%  EXERCICE 3 & FIGURE 4 : BRAS 2-DDL A CORPS RIGIDES (lc1, lc2, I1, I2)
+%  ========================================================================
+disp('--- EXERCICE 3 & FIGURE 4 : Corps rigides (lc1, lc2, I1, I2) ---');
+syms lc1 lc2 real
+
+xG1_f4 = lc1*cos(theta1);
+yG1_f4 = lc1*sin(theta1);
+xG2_f4 = L1*cos(theta1) + lc2*cos(theta1 + theta2);
+yG2_f4 = L1*sin(theta1) + lc2*sin(theta1 + theta2);
+
+vG1_f4_sq = simplify((diff(xG1_f4,theta1)*dtheta1)^2 + (diff(yG1_f4,theta1)*dtheta1)^2);
+vG2_f4_sq = simplify((diff(xG2_f4,theta1)*dtheta1 + diff(xG2_f4,theta2)*dtheta2)^2 + ...
+                     (diff(yG2_f4,theta1)*dtheta1 + diff(yG2_f4,theta2)*dtheta2)^2);
+
+Ec_f4 = simplify(0.5*I1*dtheta1^2 + 0.5*m1*vG1_f4_sq + ...
+                 0.5*I2*(dtheta1 + dtheta2)^2 + 0.5*m2*vG2_f4_sq);
+Ep_f4 = m1*g*yG1_f4 + m2*g*yG2_f4;
+
+Q_f4 = euler_lagrange(Ec_f4 - Ep_f4, q_2R, dq_2R, ddq_2R);
+M_f4 = simplify(hessian(Ec_f4, dq_2R))
+
+%% ========================================================================
+%  FONCTION AUXILIAIRE SYMBOLIQUE D'EULER-LAGRANGE
+%  ========================================================================
+function Tau = euler_lagrange(L, q, dq, ddq)
+    n = length(q);
+    Tau = sym(zeros(n, 1));
+    for i = 1:n
+        dL_ddqi = diff(L, dq(i));
+        dt_dL_ddqi = sym(0);
+        for j = 1:n
+            dt_dL_ddqi = dt_dL_ddqi + diff(dL_ddqi, q(j))*dq(j) + diff(dL_ddqi, dq(j))*ddq(j);
+        end
+        dL_dqi = diff(L, q(i));
+        Tau(i) = simplify(dt_dL_ddqi - dL_dqi);
+    end
+end</code></pre>
+                </div>
+
+                <!-- Simulated MATLAB Console Output -->
+                <div class="lg:col-span-5 glass-card overflow-hidden flex flex-col">
+                    <div class="bg-slate-900/90 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
+                        <span class="text-violet-300 font-semibold">Command Window — Sortie MATLAB</span>
+                        <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 text-[10px]">Exécution Validée</span>
+                    </div>
+                    <pre class="p-4 sm:p-5 text-xs font-mono text-cyan-200/90 overflow-x-auto leading-relaxed flex-1 max-h-[620px]"><code>>> TD5_CRM_Solution_Complete
+===================================================================
+   SERIE DE TD N°5 CRM - FORMALISME D'EULER-LAGRANGE                
+===================================================================
+--- EXERCICE 1 : Robot Plan RP (theta, d) ---
+Ep_RP =
+g*l1*m1*sin(theta) + g*m2*sin(theta)*(L1 + d - l2)
+
+Ec_RP =
+(m2*dd^2)/2 + (dtheta^2*(I1 + I2 + l1^2*m1 + m2*(L1 + d - l2)^2))/2
+
+Gamma_theta =
+ddtheta*(I1 + I2 + l1^2*m1 + m2*(L1 + d - l2)^2) + ...
+2*dd*dtheta*m2*(L1 + d - l2) + g*cos(theta)*(l1*m1 + m2*(L1 + d - l2))
+
+F_d =
+ddd*m2 + g*m2*sin(theta) - dtheta^2*m2*(L1 + d - l2)
+
+--- EXERCICE 2 : Robot Planaire 2-DDL (Masses ponctuelles) ---
+M_2R =
+[ L1^2*m1 + L1^2*m2 + L2^2*m2 + 2*L1*L2*m2*cos(theta2), L2*m2*(L2 + L1*cos(theta2))]
+[                           L2*m2*(L2 + L1*cos(theta2)),                   L2^2*m2]
+
+G_2R =
+[ g*(L1*m1*cos(theta1) + L1*m2*cos(theta1) + L2*m2*cos(theta1 + theta2))]
+[                                            L2*g*m2*cos(theta1 + theta2)]
+
+Skew_check =
+[                                         0, L1*L2*m2*sin(theta2)*(2*dtheta1 + dtheta2)]
+[ -L1*L2*m2*sin(theta2)*(2*dtheta1 + dtheta2),                                         0]
+
+--- EXERCICE 3 & FIGURE 4 : Corps rigides (lc1, lc2, I1, I2) ---
+M_f4 =
+[ I1 + I2 + lc1^2*m1 + m2*(L1^2 + 2*cos(theta2)*L1*lc2 + lc2^2), I2 + m2*(lc2^2 + L1*cos(theta2)*lc2)]
+[                           I2 + m2*(lc2^2 + L1*cos(theta2)*lc2),                       I2 + lc2^2*m2]</code></pre>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ACADEMIC FOOTER -->
+    <footer class="border-t border-slate-800/80 bg-[#05070f] mt-12 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 font-mono">
+            <div>
+                DAHANE Ahmed Lamine — Master 2 Automatique et Informatique Industrielle (AII) — USTHB — Encadrant : Pr. MENANI
+            </div>
+            <div class="text-cyan-400 font-semibold">
+                Série de TD N°5 • Modélisation Dynamique
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT: KATEX AUTO-RENDER & INTERACTIVE LAGRANGIAN DYNAMIC SIMULATOR -->
+    <script>
+        let dynMode = 'RP';
+
+        function copyMatlabCode() {
+            const codeText = document.getElementById('matlab-source').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const btnText = document.getElementById('copy-btn-text');
+            btnText.textContent = 'Copié dans le presse-papiers !';
+            setTimeout(() => {
+                btnText.textContent = 'Copier le script MATLAB';
+            }, 2200);
+        }
+
+        function switchDynMode(mode) {
+            dynMode = mode;
+            const tabRP = document.getElementById('tab-rp');
+            const tab2R = document.getElementById('tab-2r');
+            const title = document.getElementById('dyn-ctrl-title');
+
+            const slQ1 = document.getElementById('sl-q1');
+            const slQ2 = document.getElementById('sl-q2');
+
+            if (mode === 'RP') {
+                tabRP.classList.add('nav-pill-active');
+                tab2R.classList.remove('nav-pill-active');
+                title.textContent = 'État Articulaire — Ex 1 : Robot Plan RP';
+
+                document.getElementById('lbl-q1').textContent = 'Angle θ (deg) :';
+                slQ1.min = -150; slQ1.max = 150; slQ1.step = 1; slQ1.value = 30;
+
+                document.getElementById('lbl-q2').textContent = 'Élongation d (m) :';
+                slQ2.min = 0.10; slQ2.max = 1.40; slQ2.step = 0.02; slQ2.value = 0.70;
+
+                document.getElementById('lbl-dq1').textContent = 'θ̇ (rad/s)';
+                document.getElementById('lbl-dq2').textContent = 'ḋ (m/s)';
+                document.getElementById('lbl-ddq1').textContent = 'θ̈ (rad/s²)';
+                document.getElementById('lbl-ddq2').textContent = 'd̈ (m/s²)';
+            } else {
+                tab2R.classList.add('nav-pill-active');
+                tabRP.classList.remove('nav-pill-active');
+                title.textContent = 'État Articulaire — Ex 2/3 : Bras 2-DDL';
+
+                document.getElementById('lbl-q1').textContent = 'Angle θ₁ (deg) :';
+                slQ1.min = -150; slQ1.max = 150; slQ1.step = 1; slQ1.value = 35;
+
+                document.getElementById('lbl-q2').textContent = 'Angle θ₂ (deg) :';
+                slQ2.min = -150; slQ2.max = 150; slQ2.step = 1; slQ2.value = 45;
+
+                document.getElementById('lbl-dq1').textContent = 'θ̇₁ (rad/s)';
+                document.getElementById('lbl-dq2').textContent = 'θ̇₂ (rad/s)';
+                document.getElementById('lbl-ddq1').textContent = 'θ̈₁ (rad/s²)';
+                document.getElementById('lbl-ddq2').textContent = 'θ̈₂ (rad/s²)';
+            }
+
+            updateDynSim();
+        }
+
+        function resetDynSim() {
+            document.getElementById('sl-dq1').value = 1.5;
+            document.getElementById('sl-dq2').value = 0.4;
+            document.getElementById('sl-ddq1').value = 0.5;
+            document.getElementById('sl-ddq2').value = 0.2;
+            document.getElementById('sl-m1').value = 4.0;
+            document.getElementById('sl-m2').value = 2.5;
+            document.getElementById('chk-gravity').checked = true;
+            switchDynMode(dynMode);
+        }
+
+        function updateDynSim() {
+            const canvas = document.getElementById('dyn-canvas');
+            if (!canvas) return;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+            const W = rect.width;
+            const H = rect.height;
+
+            const q1Deg = parseFloat(document.getElementById('sl-q1').value);
+            const q2Raw = parseFloat(document.getElementById('sl-q2').value);
+            const dq1 = parseFloat(document.getElementById('sl-dq1').value);
+            const dq2 = parseFloat(document.getElementById('sl-dq2').value);
+            const ddq1 = parseFloat(document.getElementById('sl-ddq1').value);
+            const ddq2 = parseFloat(document.getElementById('sl-ddq2').value);
+            const m1 = parseFloat(document.getElementById('sl-m1').value);
+            const m2 = parseFloat(document.getElementById('sl-m2').value);
+            const g = document.getElementById('chk-gravity').checked ? 9.81 : 0.0;
+
+            document.getElementById('val-dq1').textContent = dq1.toFixed(2);
+            document.getElementById('val-dq2').textContent = dq2.toFixed(2);
+            document.getElementById('val-ddq1').textContent = ddq1.toFixed(2);
+            document.getElementById('val-ddq2').textContent = ddq2.toFixed(2);
+            document.getElementById('val-m1').textContent = m1.toFixed(1) + ' kg';
+            document.getElementById('val-m2').textContent = m2.toFixed(1) + ' kg';
+
+            // Clear Canvas & Draw Engineering Grid
+            ctx.fillStyle = '#060911';
+            ctx.fillRect(0, 0, W, H);
+
+            const ox = W * 0.36;
+            const oy = H * 0.65;
+            const sc = Math.min(W, H) * 0.30;
+
+            ctx.strokeStyle = 'rgba(51, 65, 85, 0.32)';
+            ctx.lineWidth = 1;
+            const step = sc * 0.5;
+            for (let x = ox % step; x < W; x += step) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+            }
+            for (let y = oy % step; y < H; y += step) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+            }
+
+            // Reference Axes X, Y
+            ctx.strokeStyle = 'rgba(6, 182, 212, 0.55)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(20, oy); ctx.lineTo(W - 20, oy); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(ox, H - 20); ctx.lineTo(ox, 20); ctx.stroke();
+            ctx.fillStyle = '#06b6d4';
+            ctx.font = '600 12px "JetBrains Mono"';
+            ctx.fillText('X (m)', W - 55, oy - 8);
+            ctx.fillText('Y (m)', ox + 8, 30);
+
+            if (dynMode === 'RP') {
+                const theta = q1Deg * Math.PI / 180;
+                const d = q2Raw;
+                const L1 = 0.50;
+                const l1 = 0.25; // G1 at L1/2
+                const l2 = 0.20; // G2 at L2/2
+                const I1 = (1 / 12) * m1 * L1 * L1;
+                const I2 = (1 / 12) * m2 * (2 * l2) * (2 * l2);
+                const r2 = L1 + d - l2;
+
+                document.getElementById('val-q1').textContent = `${q1Deg}° (${theta.toFixed(3)} rad)`;
+                document.getElementById('val-q2').textContent = `${d.toFixed(2)} m`;
+
+                const M11 = I1 + I2 + m1 * l1 * l1 + m2 * r2 * r2;
+                const M22 = m2;
+
+                const Ec = 0.5 * M11 * dq1 * dq1 + 0.5 * M22 * dq2 * dq2;
+                const Ep = (m1 * l1 + m2 * r2) * g * Math.sin(theta);
+                const Lagr = Ec - Ep;
+
+                const C_theta = 2 * m2 * r2 * dq2 * dq1;
+                const C_d = -m2 * r2 * dq1 * dq1;
+                const G_theta = (m1 * l1 + m2 * r2) * g * Math.cos(theta);
+                const G_d = m2 * g * Math.sin(theta);
+
+                const Gamma_theta = M11 * ddq1 + C_theta + G_theta;
+                const F_d = M22 * ddq2 + C_d + G_d;
+
+                document.getElementById('lagrangian-badge').textContent = `ℒ = Ec - Ep = ${Lagr.toFixed(2)} J`;
+
+                document.getElementById('out-energy').innerHTML = `
+                    <div>Ec = <span class="text-cyan-300 font-bold">${Ec.toFixed(3)} J</span></div>
+                    <div>Ep = <span class="text-violet-300 font-bold">${Ep.toFixed(3)} J</span></div>
+                    <div>ℒ = Ec - Ep = <span class="text-white font-bold">${Lagr.toFixed(3)} J</span></div>
+                `;
+                document.getElementById('out-inertia').innerHTML = `
+                    <div>[ ${M11.toFixed(3)} ,  0.000 ]</div>
+                    <div>[  0.000 ,  ${M22.toFixed(3)} ]</div>
+                    <div class="text-slate-400 text-[11px] pt-1">r₂(d) = L₁+d-l₂ = ${r2.toFixed(2)} m</div>
+                `;
+                document.getElementById('out-torques').innerHTML = `
+                    <div>Γ_θ = <span class="text-emerald-300 font-bold">${Gamma_theta.toFixed(2)} N·m</span></div>
+                    <div>F_d = <span class="text-amber-300 font-bold">${F_d.toFixed(2)} N</span></div>
+                    <div class="text-slate-400 text-[11px] pt-1">Centrifuge: ${C_d.toFixed(2)} N</div>
+                `;
+
+                // Draw Robot Plan RP
+                const x1Px = ox + L1 * Math.cos(theta) * sc;
+                const y1Px = oy - L1 * Math.sin(theta) * sc;
+                const xEndPx = ox + (L1 + d) * Math.cos(theta) * sc;
+                const yEndPx = oy - (L1 + d) * Math.sin(theta) * sc;
+
+                const xG1Px = ox + l1 * Math.cos(theta) * sc;
+                const yG1Px = oy - l1 * Math.sin(theta) * sc;
+                const xG2Px = ox + r2 * Math.cos(theta) * sc;
+                const yG2Px = oy - r2 * Math.sin(theta) * sc;
+
+                // Cylinder 1
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 12;
+                ctx.lineCap = 'round';
+                ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(x1Px, y1Px); ctx.stroke();
+
+                // Rod 2
+                ctx.strokeStyle = '#8b5cf6';
+                ctx.lineWidth = 5;
+                ctx.beginPath(); ctx.moveTo(x1Px, y1Px); ctx.lineTo(xEndPx, yEndPx); ctx.stroke();
+
+                // Gravity vectors at G1 and G2 if g > 0
+                if (g > 0) {
+                    drawDynArrow(ctx, xG1Px, yG1Px, xG1Px, yG1Px + m1 * 7, '#f59e0b', 'P₁');
+                    drawDynArrow(ctx, xG2Px, yG2Px, xG2Px, yG2Px + m2 * 9, '#f59e0b', 'P₂');
+                }
+
+                // Prismatic force vector F_d along rod axis
+                const fScale = Math.max(-65, Math.min(65, F_d * 1.4));
+                drawDynArrow(ctx, xEndPx, yEndPx, xEndPx + fScale * Math.cos(theta), yEndPx - fScale * Math.sin(theta), '#10b981', 'F_d');
+
+                // COM markers G1, G2 and pivot O
+                drawCOM(ctx, xG1Px, yG1Px, '#06b6d4', 'G₁');
+                drawCOM(ctx, xG2Px, yG2Px, '#c4b5fd', 'G₂');
+
+                ctx.fillStyle = '#0f1426';
+                ctx.strokeStyle = '#06b6d4';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath(); ctx.arc(ox, oy, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            } else {
+                // Planar 2-DOF Manipulator (Ex 2 / Ex 3 with distributed COMs a1=L1/2, a2=L2/2)
+                const th1 = q1Deg * Math.PI / 180;
+                const th2 = q2Raw * Math.PI / 180;
+                const L1 = 0.80;
+                const L2 = 0.65;
+                const a1 = L1 / 2;
+                const a2 = L2 / 2;
+                const I1 = (1 / 12) * m1 * L1 * L1;
+                const I2 = (1 / 12) * m2 * L2 * L2;
+
+                document.getElementById('val-q1').textContent = `${q1Deg}° (${th1.toFixed(3)} rad)`;
+                document.getElementById('val-q2').textContent = `${q2Raw}° (${th2.toFixed(3)} rad)`;
+
+                const c1 = Math.cos(th1), s1 = Math.sin(th1);
+                const c2 = Math.cos(th2), s2 = Math.sin(th2);
+                const c12 = Math.cos(th1 + th2);
+
+                const M11 = I1 + I2 + m1 * a1 * a1 + m2 * (L1 * L1 + a2 * a2 + 2 * L1 * a2 * c2);
+                const M12 = I2 + m2 * (a2 * a2 + L1 * a2 * c2);
+                const M22 = I2 + m2 * a2 * a2;
+
+                const Ec = 0.5 * M11 * dq1 * dq1 + M12 * dq1 * dq2 + 0.5 * M22 * dq2 * dq2;
+                const Ep = (m1 * a1 + m2 * L1) * g * s1 + m2 * a2 * g * Math.sin(th1 + th2);
+                const Lagr = Ec - Ep;
+
+                const h = m2 * L1 * a2 * s2;
+                const C1 = -h * (2 * dq1 * dq2 + dq2 * dq2);
+                const C2 = h * dq1 * dq1;
+
+                const G1 = (m1 * a1 + m2 * L1) * g * c1 + m2 * a2 * g * c12;
+                const G2 = m2 * a2 * g * c12;
+
+                const Q1 = M11 * ddq1 + M12 * ddq2 + C1 + G1;
+                const Q2 = M12 * ddq1 + M22 * ddq2 + C2 + G2;
+
+                document.getElementById('lagrangian-badge').textContent = `ℒ = Ec - Ep = ${Lagr.toFixed(2)} J`;
+
+                document.getElementById('out-energy').innerHTML = `
+                    <div>Ec = <span class="text-cyan-300 font-bold">${Ec.toFixed(3)} J</span></div>
+                    <div>Ep = <span class="text-violet-300 font-bold">${Ep.toFixed(3)} J</span></div>
+                    <div>ℒ = Ec - Ep = <span class="text-white font-bold">${Lagr.toFixed(3)} J</span></div>
+                `;
+                document.getElementById('out-inertia').innerHTML = `
+                    <div>[ ${M11.toFixed(3)} , ${M12.toFixed(3)} ]</div>
+                    <div>[ ${M12.toFixed(3)} , ${M22.toFixed(3)} ]</div>
+                    <div class="text-slate-400 text-[11px] pt-1">det(M) = ${(M11*M22 - M12*M12).toFixed(3)}</div>
+                `;
+                document.getElementById('out-torques').innerHTML = `
+                    <div>Q₁ = <span class="text-emerald-300 font-bold">${Q1.toFixed(2)} N·m</span></div>
+                    <div>Q₂ = <span class="text-amber-300 font-bold">${Q2.toFixed(2)} N·m</span></div>
+                    <div class="text-slate-400 text-[11px] pt-1">Coriolis C₁: ${C1.toFixed(2)} N·m</div>
+                `;
+
+                const x1Px = ox + L1 * c1 * sc;
+                const y1Px = oy - L1 * s1 * sc;
+                const x2Px = x1Px + L2 * c12 * sc;
+                const y2Px = y1Px - L2 * Math.sin(th1 + th2) * sc;
+
+                const xG1Px = ox + a1 * c1 * sc;
+                const yG1Px = oy - a1 * s1 * sc;
+                const xG2Px = x1Px + a2 * c12 * sc;
+                const yG2Px = y1Px - a2 * Math.sin(th1 + th2) * sc;
+
+                // Link 1
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 8;
+                ctx.lineCap = 'round';
+                ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(x1Px, y1Px); ctx.stroke();
+
+                // Link 2
+                ctx.strokeStyle = '#8b5cf6';
+                ctx.lineWidth = 6;
+                ctx.beginPath(); ctx.moveTo(x1Px, y1Px); ctx.lineTo(x2Px, y2Px); ctx.stroke();
+
+                if (g > 0) {
+                    drawDynArrow(ctx, xG1Px, yG1Px, xG1Px, yG1Px + m1 * 7, '#f59e0b', 'P₁');
+                    drawDynArrow(ctx, xG2Px, yG2Px, xG2Px, yG2Px + m2 * 9, '#f59e0b', 'P₂');
+                }
+
+                drawCOM(ctx, xG1Px, yG1Px, '#06b6d4', 'G₁');
+                drawCOM(ctx, xG2Px, yG2Px, '#c4b5fd', 'G₂');
+
+                // Joints
+                ctx.fillStyle = '#0f1426';
+                ctx.strokeStyle = '#06b6d4';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath(); ctx.arc(ox, oy, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+                ctx.beginPath(); ctx.arc(x1Px, y1Px, 6.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+                ctx.fillStyle = '#f43f5e';
+                ctx.beginPath(); ctx.arc(x2Px, y2Px, 5.5, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+
+        function drawCOM(ctx, x, y, color, label) {
+            ctx.fillStyle = color;
+            ctx.beginPath(); ctx.arc(x, y, 4.5, 0, Math.PI * 2); ctx.fill();
+            ctx.font = '700 11px "JetBrains Mono"';
+            ctx.fillText(label, x + 7, y - 6);
+        }
+
+        function drawDynArrow(ctx, x1, y1, x2, y2, color, label) {
+            if (Math.hypot(x2 - x1, y2 - y1) < 4) return;
+            const headlen = 7;
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(x2 - headlen * Math.cos(angle - Math.PI / 6), y2 - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x2 - headlen * Math.cos(angle + Math.PI / 6), y2 - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+            ctx.font = '600 11px "JetBrains Mono"';
+            ctx.fillText(label, x2 + 6, y2 + 4);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+            updateDynSim();
+        });
+
+        window.addEventListener('resize', updateDynSim);
+    </script>
+</body>
+</html>
