@@ -264,7 +264,7 @@
                         Série de TD N°5 : <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400">Modélisation Dynamique Directe et Inverse des Robots</span>
                     </h2>
                     <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-3xl">
-                        Résolution analytique intégrale par le <strong>formalisme énergétique d'Euler-Lagrange</strong> des quatre systèmes mécaniques articulés de la série : <strong>Robot Plan RP de soudage linéaire</strong> (énergies \(E_p, E_c\), équations dynamiques et force d'actionneur \(F_d\)), <strong>Manipulateur Planaire 2-DDL à masses ponctuelles</strong> (forme matricielle \(M(q)\ddot{q} + C(q,\dot{q})\dot{q} + G(q) = Q\) et antisymétrie de \(\dot{M} - 2C\)), <strong>Bras Manipulateur 2-DDL à centres d'inertie déportés \((a_1, a_2)\)</strong> et <strong>Modèle complet à corps rigides avec inerties propres \((I_1, I_2)\)</strong>.
+                        Résolution analytique intégrale par le <strong>formalisme énergétique d'Euler-Lagrange</strong> des systèmes mécaniques articulés de la série : <strong>Robot Plan RP de soudage linéaire</strong> (énergies \(E_p, E_c\), équations dynamiques et force d'actionneur \(F_d\)), <strong>Manipulateur Planaire 2-DDL à masses ponctuelles</strong> (forme matricielle \(M(q)\ddot{q} + C(q,\dot{q})\dot{q} + G(q) = Q\) et antisymétrie de \(\dot{M} - 2C\)), <strong>Bras Manipulateur 2-DDL à centres d'inertie déportés \((a_1, a_2)\)</strong> et <strong>Modèle complet à corps rigides avec inerties propres \((I_1, I_2)\)</strong>.
                     </p>
                 </div>
 
@@ -382,30 +382,21 @@
 
                                 <!-- Rotating Mechanism Group -->
                                 <g transform="translate(70, 193) rotate(-20)">
-                                    <!-- First Link L1 -->
                                     <rect x="0" y="-5" width="52" height="10" fill="#334155" stroke="#cbd5e1" stroke-width="1.5"/>
-                                    <!-- Cylinder Body 1 (mass m1, COM G1) -->
                                     <rect x="52" y="-14" width="145" height="28" fill="#141c33" stroke="#06b6d4" stroke-width="1.8"/>
-                                    <!-- Piston Head -->
                                     <rect x="135" y="-13" width="8" height="26" fill="#3b82f6"/>
-                                    <!-- Extending Rod 2 (mass m2, length L2, COM G2) -->
                                     <rect x="143" y="-4" width="145" height="8" fill="#475569" stroke="#e2e8f0" stroke-width="1.5"/>
-                                    <!-- End-Effector Torch -->
                                     <polygon points="288,-8 302,-5 302,5 288,8" fill="#8b5cf6" stroke="#f8fafc" stroke-width="1.4"/>
                                     <circle cx="305" cy="0" r="3.5" fill="#f43f5e"/>
 
-                                    <!-- Centerline -->
                                     <line x1="-10" y1="0" x2="310" y2="0" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6 3 1 3"/>
 
-                                    <!-- Center of Gravity G1 -->
                                     <circle cx="68" cy="0" r="4" fill="#06b6d4" stroke="#070913" stroke-width="1"/>
                                     <text x="63" y="14" fill="#06b6d4" font-family="Plus Jakarta Sans" font-size="11" font-weight="bold">G₁ (m₁)</text>
 
-                                    <!-- Center of Gravity G2 -->
                                     <circle cx="225" cy="0" r="4" fill="#a78bfa" stroke="#070913" stroke-width="1"/>
                                     <text x="218" y="14" fill="#c4b5fd" font-family="Plus Jakarta Sans" font-size="11" font-weight="bold">G₂ (m₂)</text>
 
-                                    <!-- Dimension Lines L1, d, L2 -->
                                     <line x1="0" y1="0" x2="0" y2="-72" stroke="#64748b" stroke-width="1"/>
                                     <line x1="52" y1="-14" x2="52" y2="-72" stroke="#64748b" stroke-width="1"/>
                                     <line x1="143" y1="-14" x2="143" y2="-45" stroke="#64748b" stroke-width="1"/>
@@ -421,7 +412,6 @@
                                     <text x="215" y="-44" fill="#f8fafc" font-family="Plus Jakarta Sans" font-size="12" font-style="italic">L₂</text>
                                 </g>
 
-                                <!-- Revolute Joint Origin O -->
                                 <circle cx="70" cy="193" r="16" fill="#0f1426" stroke="#cbd5e1" stroke-width="2"/>
                                 <circle cx="70" cy="193" r="7" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
 
@@ -481,9 +471,6 @@
                                     </ul>
                                 </div>
                             </div>
-                            <p class="text-xs text-slate-400">
-                                <em>Note de correspondance avec le modèle à masse concentrée :</em> Si l'on considère la masse \(m_2\) concentrée à l'extrémité de la tige (\(l_2 = 0, I_2 = 0\)) et \(m_1\) à l'extrémité du corps 1 (\(l_1 = L_1, I_1 = 0\)), il suffit de poser \(l_1 = L_1\) et \(l_2 = 0\) dans toutes les équations ci-dessous.
-                            </p>
                         </div>
                     </div>
 
@@ -504,9 +491,6 @@
                                 $$E_p(\theta, d) = E_{p1} + E_{p2} = m_1 g y_{G1} + m_2 g y_{G2}$$
                                 $$\boxed{E_p(\theta, d) = m_1 g l_1 \sin\theta + m_2 g (L_1 + d - l_2)\sin\theta = \big[m_1 l_1 + m_2(L_1 + d - l_2)\big] g \sin\theta}$$
                             </div>
-                            <p class="text-xs text-slate-400">
-                                <em>Remarque :</em> Si le plan \((O, \vec{x}, \vec{y})\) du robot de soudage est horizontal (\(\vec{g} \perp (O, \vec{x}, \vec{y})\)), l'altitude \(z\) reste constante et \(E_p = 0\). On conserve ici le terme gravitationnel général \(g\) (il suffit de poser \(g = 0\) dans le cas horizontal).
-                            </p>
                         </div>
                     </div>
 
@@ -521,13 +505,13 @@
 
                         <div class="space-y-3 text-sm text-slate-300 leading-relaxed">
                             <p>
-                                Par le théorème de König, l'énergie cinétique de chaque corps rigide est la somme de l'énergie cinétique de translation de son centre d'inertie et de son énergie cinétique de rotation propre autour de \(\vec{z}\) (les deux corps ayant la même vitesse angulaire \(\omega_1 = \omega_2 = \dot{\theta}\)) :
+                                Par le théorème de König, l'énergie cinétique de chaque corps rigide est la somme de l'énergie cinétique de translation de son centre d'inertie et de son énergie cinétique de rotation propre autour de \(\vec{z}\) :
                             </p>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                                 <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 space-y-1.5">
                                     <div class="font-mono text-cyan-400 font-semibold">1. Vitesse &amp; Énergie du Corps 1 :</div>
-                                    $$\begin{cases} \dot{x}_{G1} = -l_1 \dot{\theta}\sin\theta \\ \dot{y}_{G1} = l_1 \dot{\theta}\cos\theta \end{cases} \implies v_{G1}^2 = \dot{x}_{G1}^2 + \dot{y}_{G1}^2 = l_1^2 \dot{\theta}^2$$
+                                    $$\begin{cases} \dot{x}_{G1} = -l_1 \dot{\theta}\sin\theta \\ \dot{y}_{G1} = l_1 \dot{\theta}\cos\theta \end{cases} \implies v_{G1}^2 = l_1^2 \dot{\theta}^2$$
                                     $$E_{c1} = \frac{1}{2}m_1 v_{G1}^2 + \frac{1}{2}I_1 \dot{\theta}^2 = \frac{1}{2}(I_1 + m_1 l_1^2)\dot{\theta}^2$$
                                 </div>
 
@@ -557,7 +541,7 @@
 
                         <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
                             <p>
-                                Le Lagrangien du système s'écrit \(\mathcal{L}(q, \dot{q}) = E_c(q, \dot{q}) - E_p(q)\) avec \(q = \begin{bmatrix} \theta & d \end{bmatrix}^T\) et le vecteur des efforts généralisés \(\Gamma = \begin{bmatrix} \Gamma_\theta & F_d \end{bmatrix}^T\) :
+                                Le Lagrangien du système s'écrit \(\mathcal{L}(q, \dot{q}) = E_c(q, \dot{q}) - E_p(q)\) avec \(q = \begin{bmatrix} \theta \\ d \end{bmatrix}\) et le vecteur des efforts généralisés \(\Gamma = \begin{bmatrix} \Gamma_\theta \\ F_d \end{bmatrix}\) :
                             </p>
                             <div class="bg-slate-950/85 border border-slate-800 rounded-xl p-3.5 text-xs overflow-x-auto">
                                 $$\mathcal{L}(\theta, d, \dot{\theta}, \dot{d}) = \frac{1}{2}\Big[I_1 + I_2 + m_1 l_1^2 + m_2(L_1 + d - l_2)^2\Big]\dot{\theta}^2 + \frac{1}{2}m_2 \dot{d}^2 - \big[m_1 l_1 + m_2(L_1 + d - l_2)\big]g\sin\theta$$
@@ -567,11 +551,6 @@
                             <div class="bg-slate-900/90 border border-blue-500/30 rounded-xl p-4 space-y-2 text-xs sm:text-sm">
                                 <div class="font-mono text-cyan-300 font-semibold uppercase text-xs">1. Équation d'Euler-Lagrange selon \(\theta\) (Couple moteur \(\Gamma_\theta\)) :</div>
                                 $$\frac{d}{dt}\left(\frac{\partial \mathcal{L}}{\partial \dot{\theta}}\right) - \frac{\partial \mathcal{L}}{\partial \theta} = \Gamma_\theta$$
-                                $$\begin{cases}
-                                \dfrac{\partial \mathcal{L}}{\partial \dot{\theta}} = \big[I_1 + I_2 + m_1 l_1^2 + m_2(L_1 + d - l_2)^2\big]\dot{\theta} \\[8pt]
-                                \dfrac{d}{dt}\left(\dfrac{\partial \mathcal{L}}{\partial \dot{\theta}}\right) = \big[I_1 + I_2 + m_1 l_1^2 + m_2(L_1 + d - l_2)^2\big]\ddot{\theta} + 2 m_2 (L_1 + d - l_2)\dot{d}\dot{\theta} \\[8pt]
-                                \dfrac{\partial \mathcal{L}}{\partial \theta} = -\big[m_1 l_1 + m_2(L_1 + d - l_2)\big]g\cos\theta
-                                \end{cases}$$
                                 $$\boxed{\Gamma_\theta = \Big[I_1 + I_2 + m_1 l_1^2 + m_2(L_1 + d - l_2)^2\Big]\ddot{\theta} + 2 m_2 (L_1 + d - l_2)\dot{d}\dot{\theta} + \big[m_1 l_1 + m_2(L_1 + d - l_2)\big]g\cos\theta}$$
                             </div>
 
@@ -579,21 +558,15 @@
                             <div class="bg-slate-900/90 border border-violet-500/30 rounded-xl p-4 space-y-2 text-xs sm:text-sm">
                                 <div class="font-mono text-violet-300 font-semibold uppercase text-xs">2. Équation d'Euler-Lagrange selon \(d\) — Force de l'actionneur prismatique \(F_d\) (Question 4) :</div>
                                 $$\frac{d}{dt}\left(\frac{\partial \mathcal{L}}{\partial \dot{d}}\right) - \frac{\partial \mathcal{L}}{\partial d} = F_d$$
-                                $$\begin{cases}
-                                \dfrac{\partial \mathcal{L}}{\partial \dot{d}} = m_2 \dot{d} \implies \dfrac{d}{dt}\left(\dfrac{\partial \mathcal{L}}{\partial \dot{d}}\right) = m_2 \ddot{d} \\[8pt]
-                                \dfrac{\partial \mathcal{L}}{\partial d} = m_2 (L_1 + d - l_2)\dot{\theta}^2 - m_2 g \sin\theta
-                                \end{cases}$$
                                 $$\boxed{F_d = m_2 \ddot{d} - m_2 (L_1 + d - l_2)\dot{\theta}^2 + m_2 g \sin\theta}$$
-                                <p class="text-xs text-slate-400 pt-1">
-                                    <em>Interprétation physique des 3 composantes de \(F_d\) :</em> \(m_2 \ddot{d}\) est la force d'inertie linéaire du piston ; \(-m_2(L_1 + d - l_2)\dot{\theta}^2\) traduit l'effet de la <strong>force centrifuge</strong> qui tend à éjecter la tige vers l'extérieur lors de la rotation ; et \(+m_2 g \sin\theta\) compense la projection du poids de la tige le long de son axe de coulissement. (Dans le cas ponctuel \(l_2 = 0\), on a \(F_d = m_2\ddot{d} - m_2(L_1+d)\dot{\theta}^2 + m_2 g \sin\theta\)).
-                                </p>
                             </div>
 
-                            <!-- Forme Matricielle Compacte -->
-                            <div class="bg-gradient-to-r from-blue-950/50 to-violet-950/50 border border-cyan-500/40 rounded-xl p-4 overflow-x-auto text-xs">
-                                <div class="font-mono uppercase text-cyan-300 mb-1.5 font-semibold">Forme Matricielle Canonique \(M(q)\ddot{q} + C(q,\dot{q})\dot{q} + G(q) = \Gamma\)</div>
-                                $$\underbrace{\begin{bmatrix} I_{\text{tot}}(d) & 0 \\ 0 & m_2 \end{bmatrix}}_{M(q)} \begin{bmatrix} \ddot{\theta} \\ \ddot{d} \end{bmatrix} + \underbrace{\begin{bmatrix} m_2 r_2(d)\dot{d} & m_2 r_2(d)\dot{\theta} \\ -m_2 r_2(d)\dot{\theta} & 0 \end{bmatrix}}_{C(q,\dot{q})} \begin{bmatrix} \dot{\theta} \\ \dot{d} \end{bmatrix} + \underbrace{\begin{bmatrix} (m_1 l_1 + m_2 r_2(d))g\cos\theta \\ m_2 g \sin\theta \end{bmatrix}}_{G(q)} = \begin{bmatrix} \Gamma_\theta \\ F_d \end{bmatrix}$$
-                                <div class="text-slate-400 mt-1.5 font-mono">avec \(r_2(d) = L_1 + d - l_2\) et \(I_{\text{tot}}(d) = I_1 + I_2 + m_1 l_1^2 + m_2 r_2(d)^2\).</div>
+                            <!-- Forme Matricielle Compacte Ex 1 -->
+                            <div class="bg-gradient-to-r from-blue-950/50 to-violet-950/50 border border-cyan-500/40 rounded-xl p-4 space-y-2.5 overflow-x-auto text-xs">
+                                <div class="font-mono uppercase text-cyan-300 font-semibold">Forme Matricielle du Robot RP : \(M(q)\ddot{q} + C(q,\dot{q})\dot{q} + G(q) = \Gamma\)</div>
+                                $$M(q) = \begin{bmatrix} I_{\text{tot}}(d) & 0 \\ 0 & m_2 \end{bmatrix}, \qquad C(q,\dot{q}) = \begin{bmatrix} m_2 r_2(d)\dot{d} & m_2 r_2(d)\dot{\theta} \\ -m_2 r_2(d)\dot{\theta} & 0 \end{bmatrix}, \qquad G(q) = \begin{bmatrix} \big(m_1 l_1 + m_2 r_2(d)\big)g\cos\theta \\ m_2 g \sin\theta \end{bmatrix}$$
+                                $$M(q)\begin{bmatrix} \ddot{\theta} \\ \ddot{d} \end{bmatrix} + C(q,\dot{q})\begin{bmatrix} \dot{\theta} \\ \dot{d} \end{bmatrix} + G(q) = \begin{bmatrix} \Gamma_\theta \\ F_d \end{bmatrix}$$
+                                <div class="text-slate-400 pt-1 font-mono">avec \(r_2(d) = L_1 + d - l_2\) et \(I_{\text{tot}}(d) = I_1 + I_2 + m_1 l_1^2 + m_2 r_2(d)^2\).</div>
                             </div>
                         </div>
                     </div>
@@ -647,44 +620,35 @@
                                     </marker>
                                 </defs>
 
-                                <!-- Axes X, Y at O = (55, 175) -->
                                 <line x1="55" y1="175" x2="375" y2="175" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#ax-p2)"/>
                                 <text x="382" y="179" fill="#38bdf8" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">X</text>
                                 <line x1="55" y1="175" x2="55" y2="25" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#ax-p2)"/>
                                 <text x="49" y="19" fill="#38bdf8" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">Y</text>
 
-                                <!-- Base Trapezoid at O -->
                                 <polygon points="38,162 72,162 66,192 44,192" fill="#334155" stroke="#94a3b8" stroke-width="1.5"/>
                                 <text x="58" y="206" fill="#cbd5e1" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">O</text>
 
-                                <!-- Link 1 (L1) from (55,175) to (205, 118) -->
                                 <line x1="55" y1="175" x2="205" y2="118" stroke="#93c5fd" stroke-width="8" stroke-linecap="round"/>
                                 <line x1="55" y1="175" x2="205" y2="118" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
                                 <line x1="55" y1="175" x2="280" y2="90" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="4 3"/>
                                 <text x="115" y="132" fill="#f8fafc" font-family="Plus Jakarta Sans" font-size="13" font-style="italic" font-weight="bold">L₁</text>
 
-                                <!-- Angle theta 1 -->
                                 <path d="M 118 175 A 63 63 0 0 0 113 153" fill="none" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ax-p2)"/>
                                 <text x="124" y="167" fill="#38bdf8" font-family="Plus Jakarta Sans" font-size="13" font-style="italic" font-weight="bold">θ₁</text>
 
-                                <!-- Torque Q1 curved arrow around O -->
                                 <path d="M 38 190 A 24 24 0 1 1 76 164" fill="none" stroke="#8b5cf6" stroke-width="2" marker-end="url(#torq-arr)"/>
                                 <text x="14" y="152" fill="#c4b5fd" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">Q₁</text>
 
-                                <!-- Link 2 (L2) from (205,118) to (322, 35) -->
                                 <line x1="205" y1="118" x2="322" y2="35" stroke="#c4b5fd" stroke-width="8" stroke-linecap="round"/>
                                 <line x1="205" y1="118" x2="322" y2="35" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
                                 <text x="242" y="65" fill="#f8fafc" font-family="Plus Jakarta Sans" font-size="13" font-style="italic" font-weight="bold">L₂</text>
 
-                                <!-- Angle theta 2 -->
                                 <path d="M 262 97 A 60 60 0 0 0 250 85" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#torq-arr)"/>
                                 <text x="268" y="95" fill="#c4b5fd" font-family="Plus Jakarta Sans" font-size="13" font-style="italic" font-weight="bold">θ₂</text>
 
-                                <!-- Torque Q2 curved arrow around Joint 2 -->
                                 <path d="M 188 134 A 23 23 0 1 1 224 106" fill="none" stroke="#8b5cf6" stroke-width="2" marker-end="url(#torq-arr)"/>
                                 <text x="166" y="102" fill="#c4b5fd" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">Q₂</text>
 
-                                <!-- Point Masses m1 and m2 -->
                                 <circle cx="55" cy="175" r="8" fill="#2563eb" stroke="#f8fafc" stroke-width="1.5"/>
                                 <circle cx="205" cy="118" r="10" fill="#2563eb" stroke="#f8fafc" stroke-width="1.5"/>
                                 <text x="216" y="138" fill="#38bdf8" font-family="Plus Jakarta Sans" font-size="13" font-weight="bold">m₁</text>
@@ -716,7 +680,6 @@
                         <!-- High-Precision Vector SVG of Figure 3: COMs m1, m2 at distances a1, a2 -->
                         <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-3">
                             <svg viewBox="0 0 420 225" class="w-full h-auto">
-                                <!-- Axes X, Y at O = (55, 175) -->
                                 <line x1="55" y1="175" x2="375" y2="175" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#ax-p2)"/>
                                 <text x="382" y="179" fill="#38bdf8" font-size="13" font-weight="bold">X</text>
                                 <line x1="55" y1="175" x2="55" y2="25" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#ax-p2)"/>
@@ -725,22 +688,18 @@
                                 <polygon points="38,162 72,162 66,192 44,192" fill="#334155" stroke="#94a3b8" stroke-width="1.5"/>
                                 <text x="58" y="206" fill="#cbd5e1" font-size="13" font-weight="bold">O</text>
 
-                                <!-- Link 1 (L1) -->
                                 <line x1="55" y1="175" x2="205" y2="118" stroke="#93c5fd" stroke-width="9" stroke-linecap="round"/>
                                 <line x1="55" y1="175" x2="205" y2="118" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
 
-                                <!-- Link 2 (L2) -->
                                 <line x1="205" y1="118" x2="322" y2="35" stroke="#c4b5fd" stroke-width="9" stroke-linecap="round"/>
                                 <line x1="205" y1="118" x2="322" y2="35" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
 
-                                <!-- COM dots m1 at a1 and m2 at a2 -->
                                 <circle cx="130" cy="146.5" r="4.5" fill="#06b6d4"/>
                                 <text x="126" y="135" fill="#06b6d4" font-size="12" font-weight="bold">m₁</text>
 
                                 <circle cx="263" cy="76.5" r="4.5" fill="#a78bfa"/>
                                 <text x="255" y="65" fill="#c4b5fd" font-size="12" font-weight="bold">m₂</text>
 
-                                <!-- Dimension lines for a1, L1, a2, L2 -->
                                 <line x1="42" y1="142" x2="117" y2="113" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="3 2"/>
                                 <text x="72" y="118" fill="#fda4af" font-size="12" font-style="italic" font-weight="bold">a₁</text>
 
@@ -753,7 +712,6 @@
                                 <line x1="222" y1="140" x2="338" y2="57" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="3 2"/>
                                 <text x="285" y="112" fill="#fda4af" font-size="12" font-style="italic" font-weight="bold">L₂</text>
 
-                                <!-- Angles & Torques -->
                                 <text x="122" y="167" fill="#38bdf8" font-size="12" font-style="italic" font-weight="bold">θ₁</text>
                                 <text x="275" y="95" fill="#c4b5fd" font-size="12" font-style="italic" font-weight="bold">θ₂</text>
                                 <path d="M 38 190 A 24 24 0 1 1 76 164" fill="none" stroke="#8b5cf6" stroke-width="1.8" marker-end="url(#torq-arr)"/>
@@ -796,7 +754,7 @@
                                 <div class="bg-slate-900/90 border border-blue-500/30 rounded-xl p-4 space-y-2 text-xs">
                                     <div class="font-mono text-cyan-300 font-semibold uppercase">1. Positions des Masses \(m_1\) et \(m_2\)</div>
                                     <p class="text-slate-300">
-                                        La masse \(m_1\) est concentrée à l'extrémité du bras 1 (distance \(L_1\)) et \(m_2\) à l'extrémité du bras 2 (distance \(L_2\)) :
+                                        La masse \(m_1\) est située à l'extrémité du bras 1 (distance \(L_1\)) et \(m_2\) à l'extrémité du bras 2 (distance \(L_2\)) :
                                     </p>
                                     $$\begin{cases} x_1 = L_1 \cos\theta_1 \\ y_1 = L_1 \sin\theta_1 \end{cases}$$
                                     $$\begin{cases} x_2 = L_1 \cos\theta_1 + L_2 \cos(\theta_1 + \theta_2) \\ y_2 = L_1 \sin\theta_1 + L_2 \sin(\theta_1 + \theta_2) \end{cases}$$
@@ -823,24 +781,24 @@
                                 <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3 text-xs overflow-x-auto">
                                     <div>
                                         <strong class="text-cyan-300">• Articulation 1 (\(\frac{d}{dt}\frac{\partial \mathcal{L}}{\partial \dot{\theta}_1} - \frac{\partial \mathcal{L}}{\partial \theta_1} = Q_1\)) :</strong>
-                                        $$\frac{\partial \mathcal{L}}{\partial \dot{\theta}_1} = \big[(m_1 + m_2)L_1^2 + m_2 L_2^2 + 2 m_2 L_1 L_2 C_2\big]\dot{\theta}_1 + \big[m_2 L_2^2 + m_2 L_1 L_2 C_2\big]\dot{\theta}_2$$
                                         $$\boxed{Q_1 = \big[(m_1 + m_2)L_1^2 + m_2 L_2^2 + 2 m_2 L_1 L_2 C_2\big]\ddot{\theta}_1 + \big[m_2 L_2^2 + m_2 L_1 L_2 C_2\big]\ddot{\theta}_2 - m_2 L_1 L_2 S_2 (2\dot{\theta}_1\dot{\theta}_2 + \dot{\theta}_2^2) + (m_1 + m_2)g L_1 C_1 + m_2 g L_2 C_{12}}$$
                                     </div>
                                     <hr class="border-slate-800"/>
                                     <div>
                                         <strong class="text-violet-300">• Articulation 2 (\(\frac{d}{dt}\frac{\partial \mathcal{L}}{\partial \dot{\theta}_2} - \frac{\partial \mathcal{L}}{\partial \theta_2} = Q_2\)) :</strong>
-                                        $$\frac{\partial \mathcal{L}}{\partial \dot{\theta}_2} = \big[m_2 L_2^2 + m_2 L_1 L_2 C_2\big]\dot{\theta}_1 + m_2 L_2^2 \dot{\theta}_2, \qquad \frac{\partial \mathcal{L}}{\partial \theta_2} = -m_2 L_1 L_2 S_2 \dot{\theta}_1(\dot{\theta}_1 + \dot{\theta}_2) - m_2 g L_2 C_{12}$$
                                         $$\boxed{Q_2 = \big[m_2 L_2^2 + m_2 L_1 L_2 C_2\big]\ddot{\theta}_1 + m_2 L_2^2 \ddot{\theta}_2 + m_2 L_1 L_2 S_2 \dot{\theta}_1^2 + m_2 g L_2 C_{12}}$$
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Q4: Forme Matricielle M(q)q̈ + C(q,q̇)q̇ + G(q) = Q -->
-                            <div class="bg-gradient-to-r from-blue-950/50 to-violet-950/50 border border-cyan-500/40 rounded-xl p-4 space-y-2.5 overflow-x-auto text-xs">
-                                <div class="font-mono uppercase text-cyan-300 font-semibold">4. Forme Matricielle du Modèle Dynamique : \(M(\theta)\ddot{\theta} + C(\theta, \dot{\theta})\dot{\theta} + G(\theta) = Q\)</div>
-                                $$\underbrace{\begin{bmatrix} (m_1 + m_2)L_1^2 + m_2 L_2^2 + 2m_2 L_1 L_2 C_2 & m_2 L_2^2 + m_2 L_1 L_2 C_2 \\ m_2 L_2^2 + m_2 L_1 L_2 C_2 & m_2 L_2^2 \end{bmatrix}}_{M(\theta) \text{ (Matrice d'inertie symétrique définie positive)}} \begin{bmatrix} \ddot{\theta}_1 \\ \ddot{\theta}_2 \end{bmatrix} + \underbrace{\begin{bmatrix} -h\,\dot{\theta}_2 & -h(\dot{\theta}_1 + \dot{\theta}_2) \\ h\,\dot{\theta}_1 & 0 \end{bmatrix}}_{C(\theta,\dot{\theta}) \text{ (Coriolis & Centripète)}} \begin{bmatrix} \dot{\theta}_1 \\ \dot{\theta}_2 \end{bmatrix} + \underbrace{\begin{bmatrix} (m_1 + m_2)g L_1 C_1 + m_2 g L_2 C_{12} \\ m_2 g L_2 C_{12} \end{bmatrix}}_{G(\theta) \text{ (Gravité)}} = \begin{bmatrix} Q_1 \\ Q_2 \end{bmatrix}$$
+                            <div class="bg-gradient-to-r from-blue-950/50 to-violet-950/50 border border-cyan-500/40 rounded-xl p-4 space-y-3 overflow-x-auto text-xs">
+                                <div class="font-mono uppercase text-cyan-300 font-semibold">4. Forme Matricielle du Modèle Dynamique : \(M(q)\ddot{q} + C(q,\dot{q})\dot{q} + G(q) = Q\)</div>
+                                $$M(q) = \begin{bmatrix} (m_1 + m_2)L_1^2 + m_2 L_2^2 + 2m_2 L_1 L_2 C_2 & m_2 L_2^2 + m_2 L_1 L_2 C_2 \\ m_2 L_2^2 + m_2 L_1 L_2 C_2 & m_2 L_2^2 \end{bmatrix}$$
+                                $$C(q,\dot{q}) = \begin{bmatrix} -m_2 L_1 L_2 S_2 \dot{\theta}_2 & -m_2 L_1 L_2 S_2 (\dot{\theta}_1 + \dot{\theta}_2) \\ m_2 L_1 L_2 S_2 \dot{\theta}_1 & 0 \end{bmatrix}, \qquad G(q) = \begin{bmatrix} (m_1 + m_2)g L_1 C_1 + m_2 g L_2 C_{12} \\ m_2 g L_2 C_{12} \end{bmatrix}$$
+                                $$\boxed{\begin{bmatrix} (m_1 + m_2)L_1^2 + m_2 L_2^2 + 2m_2 L_1 L_2 C_2 & m_2 L_2^2 + m_2 L_1 L_2 C_2 \\ m_2 L_2^2 + m_2 L_1 L_2 C_2 & m_2 L_2^2 \end{bmatrix} \begin{bmatrix} \ddot{\theta}_1 \\ \ddot{\theta}_2 \end{bmatrix} + \begin{bmatrix} -m_2 L_1 L_2 S_2 \dot{\theta}_2 & -m_2 L_1 L_2 S_2 (\dot{\theta}_1 + \dot{\theta}_2) \\ m_2 L_1 L_2 S_2 \dot{\theta}_1 & 0 \end{bmatrix} \begin{bmatrix} \dot{\theta}_1 \\ \dot{\theta}_2 \end{bmatrix} + \begin{bmatrix} (m_1 + m_2)g L_1 C_1 + m_2 g L_2 C_{12} \\ m_2 g L_2 C_{12} \end{bmatrix} = \begin{bmatrix} Q_1 \\ Q_2 \end{bmatrix}}$$
                                 <div class="text-slate-300 font-mono pt-1">
-                                    où \(h = m_2 L_1 L_2 \sin\theta_2\). <strong>Propriété fondamentale de passivité :</strong> La matrice \(\dot{M}(\theta) - 2C(\theta,\dot{\theta}) = \begin{bmatrix} 0 & h(2\dot{\theta}_1 + \dot{\theta}_2) \\ -h(2\dot{\theta}_1 + \dot{\theta}_2) & 0 \end{bmatrix}\) est <strong>antisymétrique</strong> (\(\dot{q}^T(\dot{M}-2C)\dot{q} = 0\)).
+                                    Avec \(h = m_2 L_1 L_2 \sin\theta_2\), la matrice \(\dot{M}(q) - 2C(q,\dot{q}) = \begin{bmatrix} 0 & h(2\dot{\theta}_1 + \dot{\theta}_2) \\ -h(2\dot{\theta}_1 + \dot{\theta}_2) & 0 \end{bmatrix}\) est <strong>antisymétrique</strong>.
                                 </div>
                             </div>
                         </div>
@@ -859,7 +817,7 @@
 
                         <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
                             <p class="text-xs sm:text-sm">
-                                Sur la Figure 3, les longueurs totales des segments sont \(L_1\) et \(L_2\), tandis que les centres de masse \(m_1\) et \(m_2\) sont situés aux distances respectives \(a_1\) de l'axe 1 et \(a_2\) de l'axe 2 (avec moments d'inertie propres \(I_1, I_2\) autour de leurs centres de gravité) :
+                                Sur la Figure 3, les longueurs totales des segments sont \(L_1\) et \(L_2\), tandis que les centres de masse \(m_1\) et \(m_2\) sont situés aux distances respectives \(a_1\) de l'axe 1 et \(a_2\) de l'axe 2 :
                             </p>
 
                             <div class="bg-slate-950/85 border border-slate-800 rounded-xl p-3.5 text-xs">
@@ -876,20 +834,17 @@
                             <div class="bg-slate-900/90 border border-violet-500/30 rounded-xl p-3.5 space-y-1.5 text-xs overflow-x-auto">
                                 <div class="font-mono text-violet-300 font-semibold uppercase">2. Énergie Cinétique \(E_c(\theta_1, \theta_2, \dot{\theta}_1, \dot{\theta}_2)\) :</div>
                                 $$E_c = \frac{1}{2}I_1 \dot{\theta}_1^2 + \frac{1}{2}m_1 a_1^2 \dot{\theta}_1^2 + \frac{1}{2}I_2(\dot{\theta}_1 + \dot{\theta}_2)^2 + \frac{1}{2}m_2\Big[L_1^2 \dot{\theta}_1^2 + a_2^2(\dot{\theta}_1 + \dot{\theta}_2)^2 + 2 L_1 a_2 C_2 \dot{\theta}_1(\dot{\theta}_1 + \dot{\theta}_2)\Big]$$
-                                $$\boxed{E_c = \frac{1}{2}\big(I_1 + I_2 + m_1 a_1^2 + m_2 L_1^2 + m_2 a_2^2 + 2 m_2 L_1 a_2 C_2\big)\dot{\theta}_1^2 + \big(I_2 + m_2 a_2^2 + m_2 L_1 a_2 C_2\big)\dot{\theta}_1\dot{\theta}_2 + \frac{1}{2}(I_2 + m_2 a_2^2)\dot{\theta}_2^2}$$
                             </div>
 
                             <!-- Q3: Modèle Dynamique -->
                             <div class="bg-gradient-to-r from-violet-950/50 to-blue-950/50 border border-violet-500/40 rounded-xl p-4 space-y-2 overflow-x-auto text-xs">
                                 <div class="font-mono uppercase text-violet-300 font-semibold">3. Modèle Dynamique du Robot (\(Q_1, Q_2\)) :</div>
+                                $$M_{\text{ex3}}(q) = \begin{bmatrix} I_1 + I_2 + m_1 a_1^2 + m_2(L_1^2 + a_2^2 + 2 L_1 a_2 C_2) & I_2 + m_2(a_2^2 + L_1 a_2 C_2) \\ I_2 + m_2(a_2^2 + L_1 a_2 C_2) & I_2 + m_2 a_2^2 \end{bmatrix}$$
                                 $$\boxed{\begin{aligned}
                                 Q_1 &= \big(I_1 + I_2 + m_1 a_1^2 + m_2 L_1^2 + m_2 a_2^2 + 2 m_2 L_1 a_2 C_2\big)\ddot{\theta}_1 + \big(I_2 + m_2 a_2^2 + m_2 L_1 a_2 C_2\big)\ddot{\theta}_2 \\
                                     &\quad - m_2 L_1 a_2 S_2 (2\dot{\theta}_1\dot{\theta}_2 + \dot{\theta}_2^2) + (m_1 a_1 + m_2 L_1)g C_1 + m_2 a_2 g C_{12} \\[8pt]
                                 Q_2 &= \big(I_2 + m_2 a_2^2 + m_2 L_1 a_2 C_2\big)\ddot{\theta}_1 + (I_2 + m_2 a_2^2)\ddot{\theta}_2 + m_2 L_1 a_2 S_2 \dot{\theta}_1^2 + m_2 a_2 g C_{12}
                                 \end{aligned}}$$
-                                <p class="text-slate-400 pt-1">
-                                    <em>Vérification :</em> En posant \(a_1 = L_1\), \(a_2 = L_2\) et \(I_1 = I_2 = 0\), on retrouve identiquement les équations de l'Exercice 2.
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -918,7 +873,7 @@
                         <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">Page 3</span>
                     </div>
 
-                    <!-- High-Precision Vector SVG of Figure 4: Robot manipulateur 2ddl with frames O1, O2, X0..X2, Y0..Y2, Z0..Z2, lc1, lc2, l1, l2 -->
+                    <!-- High-Precision Vector SVG of Figure 4 -->
                     <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-3">
                         <svg viewBox="0 0 420 295" class="w-full h-auto">
                             <defs>
@@ -930,7 +885,6 @@
                                 </marker>
                             </defs>
 
-                            <!-- Global Frame (X, Y) and Frame 0 (X0, Y0, Z0) at O1 = (75, 235) -->
                             <line x1="75" y1="235" x2="365" y2="235" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#ax-f4)"/>
                             <text x="372" y="239" fill="#38bdf8" font-size="13" font-weight="bold">X</text>
                             <text x="178" y="252" fill="#94a3b8" font-size="12" font-style="italic">X₀</text>
@@ -939,42 +893,33 @@
                             <text x="69" y="27" fill="#38bdf8" font-size="13" font-weight="bold">Y</text>
                             <text x="53" y="135" fill="#94a3b8" font-size="12" font-style="italic">Y₀</text>
 
-                            <!-- Z0 downward-left indicator -->
                             <line x1="75" y1="235" x2="48" y2="262" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#ax-f4)"/>
                             <text x="34" y="274" fill="#cbd5e1" font-size="11" font-style="italic">Z₀</text>
                             <text x="80" y="254" fill="#f8fafc" font-size="12" font-weight="bold">O₁</text>
 
-                            <!-- Link 1 from O1=(75,235) to O2=(178, 152) -->
                             <line x1="75" y1="235" x2="178" y2="152" stroke="#cbd5e1" stroke-width="11" stroke-linecap="round" opacity="0.25"/>
                             <line x1="75" y1="235" x2="178" y2="152" stroke="#60a5fa" stroke-width="3"/>
 
-                            <!-- Axis X1 extension -->
                             <line x1="178" y1="152" x2="275" y2="74" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#ax-f4)"/>
                             <text x="280" y="76" fill="#38bdf8" font-size="12" font-style="italic" font-weight="bold">X₁</text>
 
-                            <!-- Axis Y1 perpendicular to Link 1 -->
                             <line x1="178" y1="152" x2="122" y2="82" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#ax-f4)"/>
                             <text x="108" y="80" fill="#38bdf8" font-size="12" font-style="italic" font-weight="bold">Y₁</text>
 
-                            <!-- Axis Z1 -->
                             <line x1="178" y1="152" x2="174" y2="205" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#ax-f4)"/>
                             <text x="168" y="218" fill="#cbd5e1" font-size="11" font-style="italic">Z₁</text>
                             <text x="190" y="168" fill="#f8fafc" font-size="12" font-weight="bold">O₂</text>
 
-                            <!-- Angle theta 1 -->
                             <path d="M 135 235 A 60 60 0 0 0 122 197" fill="none" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ax-f4)"/>
                             <text x="142" y="220" fill="#38bdf8" font-size="12" font-style="italic" font-weight="bold">θ₁</text>
 
-                            <!-- Dimensions lc1 and l1 -->
                             <circle cx="126" cy="193.5" r="4" fill="#06b6d4"/>
                             <text x="45" y="185" fill="#06b6d4" font-size="11" font-style="italic" font-weight="bold">l_c1</text>
                             <text x="86" y="165" fill="#f8fafc" font-size="12" font-style="italic" font-weight="bold">l₁</text>
 
-                            <!-- Link 2 from O2=(178,152) to End=(232, 42) -->
                             <line x1="178" y1="152" x2="232" y2="42" stroke="#c4b5fd" stroke-width="11" stroke-linecap="round" opacity="0.25"/>
                             <line x1="178" y1="152" x2="232" y2="42" stroke="#a78bfa" stroke-width="3"/>
 
-                            <!-- Frame 2 (X2, Y2, Z2) at tip (232, 42) -->
                             <line x1="232" y1="42" x2="256" y2="8" stroke="#a78bfa" stroke-width="1.6" marker-end="url(#ax-f4v)"/>
                             <text x="262" y="16" fill="#c4b5fd" font-size="12" font-style="italic" font-weight="bold">X₂</text>
 
@@ -984,17 +929,14 @@
                             <line x1="232" y1="42" x2="225" y2="82" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#ax-f4v)"/>
                             <text x="234" y="88" fill="#cbd5e1" font-size="11" font-style="italic">Z₂</text>
 
-                            <!-- Angle theta 2 & phi -->
                             <path d="M 225 114 A 55 55 0 0 0 202 103" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ax-f4v)"/>
                             <text x="214" y="96" fill="#c4b5fd" font-size="12" font-style="italic" font-weight="bold">θ₂</text>
                             <text x="228" y="128" fill="#94a3b8" font-size="11" font-style="italic">φ = θ₁+θ₂</text>
 
-                            <!-- Dimensions lc2 and l2 -->
                             <circle cx="205" cy="97" r="4" fill="#a78bfa"/>
                             <text x="242" y="114" fill="#c4b5fd" font-size="11" font-style="italic" font-weight="bold">l_c2</text>
                             <text x="268" y="98" fill="#f8fafc" font-size="12" font-style="italic" font-weight="bold">l₂</text>
 
-                            <!-- Joints O1 & O2 -->
                             <circle cx="75" cy="235" r="10" fill="#2563eb" stroke="#f8fafc" stroke-width="1.5"/>
                             <circle cx="178" cy="152" r="10" fill="#2563eb" stroke="#f8fafc" stroke-width="1.5"/>
 
@@ -1007,7 +949,7 @@
                         <ul class="list-disc list-inside space-y-1">
                             <li><strong>\(l_1, l_2\) :</strong> longueurs des segments 1 et 2.</li>
                             <li><strong>\(l_{c1}, l_{c2}\) :</strong> abscisses des centres de gravité \(G_1\) et \(G_2\) sur les axes locaux \(X_1\) et \(X_2\).</li>
-                            <li><strong>\(m_1, m_2\) et \(I_1, I_2\) :</strong> masses et moments d'inertie barycentriques autour des axes normaux au plan du mouvement.</li>
+                            <li><strong>\(m_1, m_2\) et \(I_1, I_2\) :</strong> masses et moments d'inertie barycentriques.</li>
                             <li><strong>\(\phi = \theta_1 + \theta_2\) :</strong> orientation absolue du corps 2 par rapport à \(X_0\).</li>
                         </ul>
                     </div>
@@ -1026,34 +968,29 @@
 
                         <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
                             <p>
-                                La Figure 4 présente la représentation normalisée en robotique industrielle d'un bras manipulateur 2-DDL à corps rigides quelconques, reliant directement les <strong>repères cinématiques locaux</strong> \((X_0, Y_0, Z_0)\), \((X_1, Y_1, Z_1)\) et \((X_2, Y_2, Z_2)\) aux grandeurs dynamiques \((m_i, l_{ci}, I_i)\) :
+                                La Figure 4 présente la représentation normalisée d'un bras manipulateur 2-DDL à corps rigides quelconques, reliant les <strong>repères cinématiques locaux</strong> \((X_0, Y_0, Z_0)\), \((X_1, Y_1, Z_1)\) et \((X_2, Y_2, Z_2)\) aux grandeurs dynamiques \((m_i, l_{ci}, I_i)\) :
                             </p>
 
-                            <!-- 1. Transformations Homogènes & Positions des Centres de Masse -->
+                            <!-- 1. Transformations Homogènes -->
                             <div class="bg-slate-900/90 border border-blue-500/30 rounded-xl p-4 space-y-2.5 text-xs overflow-x-auto">
-                                <div class="font-mono text-cyan-300 font-semibold uppercase">1. Transformations Homogènes \({^0T_1}\), \({^0T_2}\) &amp; Coordonnées des Centres de Masse \(G_1, G_2\)</div>
-                                $${^0T_1} = \begin{bmatrix} C_1 & -S_1 & 0 & l_1 C_1 \\ S_1 & C_1 & 0 & l_1 S_1 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}, \qquad {^0T_2} = {^0T_1}{^1T_2} = \begin{bmatrix} C_{12} & -S_{12} & 0 & l_1 C_1 + l_2 C_{12} \\ S_{12} & C_{12} & 0 & l_1 S_1 + l_2 S_{12} \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}$$
-                                $$\overrightarrow{O_1 G_1} = \begin{bmatrix} l_{c1}\cos\theta_1 \\ l_{c1}\sin\theta_1 \end{bmatrix}, \qquad \overrightarrow{O_1 G_2} = \begin{bmatrix} l_1\cos\theta_1 + l_{c2}\cos(\theta_1 + \theta_2) \\ l_1\sin\theta_1 + l_{c2}\sin(\theta_1 + \theta_2) \end{bmatrix}$$
+                                <div class="font-mono text-cyan-300 font-semibold uppercase">1. Transformations Homogènes \({^0T_1}\), \({^0T_2}\) &amp; Positions des Centres de Masse</div>
+                                $${^0T_1} = \begin{bmatrix} C_1 & -S_1 & 0 & l_1 C_1 \\ S_1 & C_1 & 0 & l_1 S_1 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}, \qquad {^0T_2} = \begin{bmatrix} C_{12} & -S_{12} & 0 & l_1 C_1 + l_2 C_{12} \\ S_{12} & C_{12} & 0 & l_1 S_1 + l_2 S_{12} \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}$$
                             </div>
 
-                            <!-- 2. Décomposition des Énergies -->
+                            <!-- 2. Énergies -->
                             <div class="bg-slate-950/85 border border-slate-800 rounded-xl p-4 space-y-2 text-xs overflow-x-auto">
-                                <div class="font-mono text-violet-300 font-semibold uppercase">2. Énergies Cinétique \(E_c\) et Potentielle \(E_p\) en fonction de \((l_1, l_{c1}, l_{c2}, I_1, I_2)\)</div>
-                                $$E_c(\theta, \dot{\theta}) = \frac{1}{2}\dot{\theta}^T M(\theta)\dot{\theta} = \frac{1}{2}M_{11}(\theta_2)\dot{\theta}_1^2 + M_{12}(\theta_2)\dot{\theta}_1\dot{\theta}_2 + \frac{1}{2}M_{22}\dot{\theta}_2^2$$
-                                $$E_p(\theta) = (m_1 l_{c1} + m_2 l_1)g\sin\theta_1 + m_2 l_{c2} g \sin(\theta_1 + \theta_2)$$
+                                <div class="font-mono text-violet-300 font-semibold uppercase">2. Énergies Cinétique \(E_c\) et Potentielle \(E_p\)</div>
+                                $$E_c(\theta, \dot{\theta}) = \frac{1}{2}\dot{\theta}^T M(\theta)\dot{\theta}, \qquad E_p(\theta) = (m_1 l_{c1} + m_2 l_1)g\sin\theta_1 + m_2 l_{c2} g \sin(\theta_1 + \theta_2)$$
                             </div>
 
-                            <!-- 3. Forme Matricielle Générale & Modèle Dynamique Inverse (MDI) -->
+                            <!-- 3. Forme Matricielle Générale & MDI -->
                             <div class="bg-gradient-to-r from-blue-950/50 to-violet-950/50 border border-cyan-500/40 rounded-xl p-4 space-y-3 overflow-x-auto text-xs">
                                 <div class="font-mono uppercase text-cyan-300 font-semibold">3. Modèle Dynamique Inverse (MDI) : \(\Gamma = M(\theta)\ddot{\theta} + C(\theta, \dot{\theta})\dot{\theta} + G(\theta)\)</div>
-                                $$\begin{bmatrix} \Gamma_1 \\ \Gamma_2 \end{bmatrix} = \begin{bmatrix} I_1 + I_2 + m_1 l_{c1}^2 + m_2(l_1^2 + l_{c2}^2 + 2 l_1 l_{c2} C_2) & I_2 + m_2(l_{c2}^2 + l_1 l_{c2} C_2) \\ I_2 + m_2(l_{c2}^2 + l_1 l_{c2} C_2) & I_2 + m_2 l_{c2}^2 \end{bmatrix} \begin{bmatrix} \ddot{\theta}_1 \\ \ddot{\theta}_2 \end{bmatrix} + \begin{bmatrix} -m_2 l_1 l_{c2} S_2 \dot{\theta}_2 & -m_2 l_1 l_{c2} S_2 (\dot{\theta}_1 + \dot{\theta}_2) \\ m_2 l_1 l_{c2} S_2 \dot{\theta}_1 & 0 \end{bmatrix} \begin{bmatrix} \dot{\theta}_1 \\ \dot{\theta}_2 \end{bmatrix} + \begin{bmatrix} (m_1 l_{c1} + m_2 l_1)g C_1 + m_2 l_{c2} g C_{12} \\ m_2 l_{c2} g C_{12} \end{bmatrix}$$
+                                $$\boxed{\begin{bmatrix} I_1 + I_2 + m_1 l_{c1}^2 + m_2(l_1^2 + l_{c2}^2 + 2 l_1 l_{c2} C_2) & I_2 + m_2(l_{c2}^2 + l_1 l_{c2} C_2) \\ I_2 + m_2(l_{c2}^2 + l_1 l_{c2} C_2) & I_2 + m_2 l_{c2}^2 \end{bmatrix} \begin{bmatrix} \ddot{\theta}_1 \\ \ddot{\theta}_2 \end{bmatrix} + \begin{bmatrix} -m_2 l_1 l_{c2} S_2 \dot{\theta}_2 & -m_2 l_1 l_{c2} S_2 (\dot{\theta}_1 + \dot{\theta}_2) \\ m_2 l_1 l_{c2} S_2 \dot{\theta}_1 & 0 \end{bmatrix} \begin{bmatrix} \dot{\theta}_1 \\ \dot{\theta}_2 \end{bmatrix} + \begin{bmatrix} (m_1 l_{c1} + m_2 l_1)g C_1 + m_2 l_{c2} g C_{12} \\ m_2 l_{c2} g C_{12} \end{bmatrix} = \begin{bmatrix} \Gamma_1 \\ \Gamma_2 \end{bmatrix}}$$
 
                                 <div class="border-t border-slate-700/80 pt-2.5 text-slate-300">
-                                    <strong class="text-violet-300">Modèle Dynamique Direct (MDD) pour la simulation temporelle :</strong>
+                                    <strong class="text-violet-300">Modèle Dynamique Direct (MDD) :</strong>
                                     $$\ddot{\theta} = M(\theta)^{-1}\Big[\Gamma - C(\theta, \dot{\theta})\dot{\theta} - G(\theta)\Big]$$
-                                    <span class="text-slate-400 block mt-1">
-                                        La matrice \(M(\theta)\) étant strictement définie positive pour tout \(\theta \in \mathbb{R}^2\) (\(\det M(\theta) > 0\)), le Modèle Dynamique Direct \(\ddot{\theta}\) existe et est unique en tout point de l'espace articulaire, y compris aux configurations cinématiquement singulières (\(\theta_2 = 0\) ou \(\pi\)).
-                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -1091,7 +1028,6 @@
                         <button onclick="resetDynSim()" class="text-xs font-mono text-slate-400 hover:text-cyan-300 underline">Réinitialiser</button>
                     </div>
 
-                    <!-- Positions q1, q2 -->
                     <div class="space-y-1">
                         <div class="flex justify-between text-xs font-mono">
                             <span id="lbl-q1" class="text-slate-300">Angle \(\theta\) (deg) :</span>
@@ -1108,7 +1044,6 @@
                         <input id="sl-q2" type="range" min="0.1" max="1.5" step="0.02" value="0.70" class="w-full" oninput="updateDynSim()">
                     </div>
 
-                    <!-- Velocities dq1, dq2 -->
                     <div class="grid grid-cols-2 gap-3 pt-1">
                         <div class="space-y-1">
                             <div class="flex justify-between text-[11px] font-mono">
@@ -1126,7 +1061,6 @@
                         </div>
                     </div>
 
-                    <!-- Accelerations ddq1, ddq2 -->
                     <div class="grid grid-cols-2 gap-3">
                         <div class="space-y-1">
                             <div class="flex justify-between text-[11px] font-mono">
@@ -1146,7 +1080,6 @@
 
                     <hr class="border-slate-800"/>
 
-                    <!-- Physical Masses m1, m2 -->
                     <div class="grid grid-cols-2 gap-3">
                         <div class="space-y-1">
                             <div class="flex justify-between text-[11px] font-mono">
@@ -1164,7 +1097,6 @@
                         </div>
                     </div>
 
-                    <!-- Gravity Toggle -->
                     <div class="flex items-center justify-between bg-slate-950/75 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono">
                         <span class="text-slate-300">Pesanteur \(g = 9.81\text{ m/s}^2\) (Plan vertical)</span>
                         <input id="chk-gravity" type="checkbox" checked onchange="updateDynSim()" class="w-4 h-4 accent-cyan-500 cursor-pointer">
@@ -1188,7 +1120,6 @@
                         </div>
                     </div>
 
-                    <!-- Live Readouts: Energies, Inertia Matrix, Coriolis + Gravity & Actuator Forces -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
                         <div class="glass-card p-4 space-y-2">
                             <div class="text-cyan-400 font-semibold uppercase text-[11px]">Bilan Énergétique (Lagrange)</div>
@@ -1253,7 +1184,6 @@ disp('===================================================================');
 disp('--- EXERCICE 1 : Robot Plan RP (theta, d) ---');
 syms theta d dtheta dd ddtheta ddd L1 l1 l2 m1 m2 I1 I2 g real
 
-% Positions des centres de gravite G1 et G2 :
 xG1 = l1 * cos(theta);
 yG1 = l1 * sin(theta);
 r2  = L1 + d - l2;
@@ -1274,15 +1204,11 @@ vG2_sq = simplify(dxG2^2 + dyG2^2);
 
 Ec_RP = simplify(0.5*m1*vG1_sq + 0.5*I1*dtheta^2 + 0.5*m2*vG2_sq + 0.5*I2*dtheta^2)
 
-% 3. Lagrangien L = Ec - Ep et equations d'Euler-Lagrange :
+% 3 & 4. Lagrangien et equations d'Euler-Lagrange (Gamma_theta et F_d) :
 L_RP = Ec_RP - Ep_RP;
-q_RP   = [theta; d];
-dq_RP  = [dtheta; dd];
-ddq_RP = [ddtheta; ddd];
-
-Gamma_RP = euler_lagrange(L_RP, q_RP, dq_RP, ddq_RP);
+Gamma_RP = euler_lagrange(L_RP, [theta; d], [dtheta; dd], [ddtheta; ddd]);
 Gamma_theta = Gamma_RP(1)
-F_d         = Gamma_RP(2)   % Question 4 : Force de l'actionneur prismatique d
+F_d         = Gamma_RP(2)
 
 %% ========================================================================
 %  EXERCICE 2 : MANIPULATEUR PLANAIRE 2-DDL A MASSES PONCTUELLES (m1, m2)
@@ -1290,19 +1216,16 @@ F_d         = Gamma_RP(2)   % Question 4 : Force de l'actionneur prismatique d
 disp('--- EXERCICE 2 : Robot Planaire 2-DDL (Masses ponctuelles) ---');
 syms theta1 theta2 dtheta1 dtheta2 ddtheta1 ddtheta2 L2 real
 
-% 1. Positions de m1 et m2 :
 x1 = L1*cos(theta1);
 y1 = L1*sin(theta1);
 x2 = L1*cos(theta1) + L2*cos(theta1 + theta2);
 y2 = L1*sin(theta1) + L2*sin(theta1 + theta2);
 
-% 2. Vitesses au carre v1^2 et v2^2 :
 v1_sq = simplify((diff(x1,theta1)*dtheta1)^2 + (diff(y1,theta1)*dtheta1)^2);
 dx2   = diff(x2,theta1)*dtheta1 + diff(x2,theta2)*dtheta2;
 dy2   = diff(y2,theta1)*dtheta1 + diff(y2,theta2)*dtheta2;
 v2_sq = simplify(dx2^2 + dy2^2);
 
-% 3. Energies et Modele Dynamique Direct :
 Ec_2R = simplify(0.5*m1*v1_sq + 0.5*m2*v2_sq);
 Ep_2R = m1*g*y1 + m2*g*y2;
 L_2R  = Ec_2R - Ep_2R;
@@ -1311,20 +1234,15 @@ q_2R   = [theta1; theta2];
 dq_2R  = [dtheta1; dtheta2];
 ddq_2R = [ddtheta1; ddtheta2];
 
-Q_2R = euler_lagrange(L_2R, q_2R, dq_2R, ddq_2R);
-Q1_ex2 = Q_2R(1)
-Q2_ex2 = Q_2R(2)
+Q_2R   = euler_lagrange(L_2R, q_2R, dq_2R, ddq_2R);
+M_2R   = simplify(hessian(Ec_2R, dq_2R))
+G_2R   = simplify(jacobian(Ep_2R, q_2R).')
 
-% 4. Extraction de la forme matricielle M(q)*ddq + C(q,dq)*dq + G(q) = Q :
-M_2R = simplify(hessian(Ec_2R, dq_2R))
-G_2R = simplify(jacobian(Ep_2R, q_2R).')
-
-% Verification de la propriete d'antisymetrie de (dM/dt - 2*C) :
 h = m2 * L1 * L2 * sin(theta2);
 C_2R = [-h*dtheta2, -h*(dtheta1 + dtheta2);
          h*dtheta1,  0];
 dM_dt = diff(M_2R, theta1)*dtheta1 + diff(M_2R, theta2)*dtheta2;
-Skew_check = simplify(dM_dt - 2*C_2R) % Doit verifier Skew_check + Skew_check.' == 0
+Skew_check = simplify(dM_dt - 2*C_2R)
 
 %% ========================================================================
 %  EXERCICE 3 & FIGURE 4 : BRAS 2-DDL A CORPS RIGIDES (lc1, lc2, I1, I2)
@@ -1348,9 +1266,6 @@ Ep_f4 = m1*g*yG1_f4 + m2*g*yG2_f4;
 Q_f4 = euler_lagrange(Ec_f4 - Ep_f4, q_2R, dq_2R, ddq_2R);
 M_f4 = simplify(hessian(Ec_f4, dq_2R))
 
-%% ========================================================================
-%  FONCTION AUXILIAIRE SYMBOLIQUE D'EULER-LAGRANGE
-%  ========================================================================
 function Tau = euler_lagrange(L, q, dq, ddq)
     n = length(q);
     Tau = sym(zeros(n, 1));
@@ -1417,7 +1332,7 @@ M_f4 =
     <footer class="border-t border-slate-800/80 bg-[#05070f] mt-12 py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 font-mono">
             <div>
-                DAHANE Ahmed Lamine — Master 2 Automatique et Informatique Industrielle (AII) — USTHB — Encadrant : Pr. MENANI
+                DAHANE Ahmed Lamine — Master 2 Automatique et Informatique Industrielle (AII) — USTHB — Encadrante : Pr. MENANI
             </div>
             <div class="text-cyan-400 font-semibold">
                 Série de TD N°5 • Modélisation Dynamique
@@ -1529,7 +1444,6 @@ M_f4 =
             document.getElementById('val-m1').textContent = m1.toFixed(1) + ' kg';
             document.getElementById('val-m2').textContent = m2.toFixed(1) + ' kg';
 
-            // Clear Canvas & Draw Engineering Grid
             ctx.fillStyle = '#060911';
             ctx.fillRect(0, 0, W, H);
 
@@ -1547,7 +1461,6 @@ M_f4 =
                 ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
             }
 
-            // Reference Axes X, Y
             ctx.strokeStyle = 'rgba(6, 182, 212, 0.55)';
             ctx.lineWidth = 1.5;
             ctx.beginPath(); ctx.moveTo(20, oy); ctx.lineTo(W - 20, oy); ctx.stroke();
@@ -1561,8 +1474,8 @@ M_f4 =
                 const theta = q1Deg * Math.PI / 180;
                 const d = q2Raw;
                 const L1 = 0.50;
-                const l1 = 0.25; // G1 at L1/2
-                const l2 = 0.20; // G2 at L2/2
+                const l1 = 0.25;
+                const l2 = 0.20;
                 const I1 = (1 / 12) * m1 * L1 * L1;
                 const I2 = (1 / 12) * m2 * (2 * l2) * (2 * l2);
                 const r2 = L1 + d - l2;
@@ -1603,7 +1516,6 @@ M_f4 =
                     <div class="text-slate-400 text-[11px] pt-1">Centrifuge: ${C_d.toFixed(2)} N</div>
                 `;
 
-                // Draw Robot Plan RP
                 const x1Px = ox + L1 * Math.cos(theta) * sc;
                 const y1Px = oy - L1 * Math.sin(theta) * sc;
                 const xEndPx = ox + (L1 + d) * Math.cos(theta) * sc;
@@ -1614,28 +1526,23 @@ M_f4 =
                 const xG2Px = ox + r2 * Math.cos(theta) * sc;
                 const yG2Px = oy - r2 * Math.sin(theta) * sc;
 
-                // Cylinder 1
                 ctx.strokeStyle = '#3b82f6';
                 ctx.lineWidth = 12;
                 ctx.lineCap = 'round';
                 ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(x1Px, y1Px); ctx.stroke();
 
-                // Rod 2
                 ctx.strokeStyle = '#8b5cf6';
                 ctx.lineWidth = 5;
                 ctx.beginPath(); ctx.moveTo(x1Px, y1Px); ctx.lineTo(xEndPx, yEndPx); ctx.stroke();
 
-                // Gravity vectors at G1 and G2 if g > 0
                 if (g > 0) {
                     drawDynArrow(ctx, xG1Px, yG1Px, xG1Px, yG1Px + m1 * 7, '#f59e0b', 'P₁');
                     drawDynArrow(ctx, xG2Px, yG2Px, xG2Px, yG2Px + m2 * 9, '#f59e0b', 'P₂');
                 }
 
-                // Prismatic force vector F_d along rod axis
                 const fScale = Math.max(-65, Math.min(65, F_d * 1.4));
                 drawDynArrow(ctx, xEndPx, yEndPx, xEndPx + fScale * Math.cos(theta), yEndPx - fScale * Math.sin(theta), '#10b981', 'F_d');
 
-                // COM markers G1, G2 and pivot O
                 drawCOM(ctx, xG1Px, yG1Px, '#06b6d4', 'G₁');
                 drawCOM(ctx, xG2Px, yG2Px, '#c4b5fd', 'G₂');
 
@@ -1644,7 +1551,6 @@ M_f4 =
                 ctx.lineWidth = 2.5;
                 ctx.beginPath(); ctx.arc(ox, oy, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
             } else {
-                // Planar 2-DOF Manipulator (Ex 2 / Ex 3 with distributed COMs a1=L1/2, a2=L2/2)
                 const th1 = q1Deg * Math.PI / 180;
                 const th2 = q2Raw * Math.PI / 180;
                 const L1 = 0.80;
@@ -1707,13 +1613,11 @@ M_f4 =
                 const xG2Px = x1Px + a2 * c12 * sc;
                 const yG2Px = y1Px - a2 * Math.sin(th1 + th2) * sc;
 
-                // Link 1
                 ctx.strokeStyle = '#3b82f6';
                 ctx.lineWidth = 8;
                 ctx.lineCap = 'round';
                 ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(x1Px, y1Px); ctx.stroke();
 
-                // Link 2
                 ctx.strokeStyle = '#8b5cf6';
                 ctx.lineWidth = 6;
                 ctx.beginPath(); ctx.moveTo(x1Px, y1Px); ctx.lineTo(x2Px, y2Px); ctx.stroke();
@@ -1726,7 +1630,6 @@ M_f4 =
                 drawCOM(ctx, xG1Px, yG1Px, '#06b6d4', 'G₁');
                 drawCOM(ctx, xG2Px, yG2Px, '#c4b5fd', 'G₂');
 
-                // Joints
                 ctx.fillStyle = '#0f1426';
                 ctx.strokeStyle = '#06b6d4';
                 ctx.lineWidth = 2.5;
